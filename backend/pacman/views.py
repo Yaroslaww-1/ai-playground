@@ -1,6 +1,11 @@
-from django.http import HttpResponse
+import json
+from django.http import JsonResponse
+
+from pacman.domain.map_generator import MapGenerator
 
 
-# Create your views here.
-def index(request):
-    return HttpResponse("Hello, world. You're at the pacman index.")
+def get_map(request):
+    generator = MapGenerator(16, 16)
+    map = generator.generate()
+    print(map)
+    return JsonResponse({'map': map})
