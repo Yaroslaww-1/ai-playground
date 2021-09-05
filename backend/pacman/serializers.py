@@ -1,6 +1,15 @@
 from json import JSONEncoder
 
 
+class PositionSerializer():
+    @staticmethod
+    def to_json(position):
+        return {
+            'x': position.x,
+            'y': position.y,
+        }
+
+
 class MapSerializer():
     @staticmethod
     def to_json(map):
@@ -17,6 +26,6 @@ class GameSerializer():
         return {
             'map': MapSerializer.to_json(game.map),
             'enemyCount': game.enemy_count,
-            'playerPosition': game.player_position,
-            'enemyPositions': game.enemy_positions,
+            'playerPosition': PositionSerializer.to_json(game.player_position),
+            'enemyPositions': list(map(PositionSerializer.to_json, game.enemy_positions)),
         }

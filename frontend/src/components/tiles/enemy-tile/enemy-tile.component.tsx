@@ -4,8 +4,8 @@ import { Tile } from '../..';
 
 import './index.css';
 
-export const GhostTile = () => {
+export const EnemyTile = () => {
   return (
-    <Tile className="ghost-tile" />
+    <Tile className="enemy-tile" />
   )
 }
