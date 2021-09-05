@@ -14,7 +14,7 @@ class Game:
         self.game_loop = None
         self.enemy_behaviour = enemy_behaviour
         self.enemy_positions_changed_listener = lambda x: x
-        self.game_over_lister = lambda x: x
+        self.game_over_lister = None
 
     def get_initial_player_position(self):
         return Position(0, 0)
@@ -37,6 +37,7 @@ class Game:
     def stop(self):
         self.game_loop.stop()
         self.enemy_positions_changed_listener = lambda x: x
+        self.game_over_lister = None
 
     def make_iteration(self):
         new_enemy_positions = []
@@ -44,10 +45,14 @@ class Game:
             new_enemy_positions.append(self.enemy_behaviour.get_next_position(enemy_position.x, enemy_position.y))
         self.enemy_positions = new_enemy_positions
         self.enemy_positions_changed_listener(self.enemy_positions)
+        self.check_if_game_over()
 
     def set_player_position(self, x, y):
         self.player_position = Position(x, y)
+        self.check_if_game_over()
+
+    def check_if_game_over(self):
         for enemy_position in self.enemy_positions:
-            if enemy_position.x == x and enemy_position.y == y:
+            if enemy_position.x == self.player_position.x and enemy_position.y == self.player_position.y:
                 self.game_over_lister()
                 return

@@ -10,6 +10,7 @@ import { Position } from '../models/position.model';
 
 export const Game = () => {
   const [game, setGame] = useState<GameModel | null>(null);
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const startGame = async () => {
     const game = await gameService.startGame();
@@ -19,6 +20,7 @@ export const Game = () => {
   const stopGame = async () => {
     await gameService.stopGame();
     setGame(null);
+    setIsGameOver(true);
   }
 
   const isPositionAvailableForMove = (position: Position) => {
@@ -27,6 +29,7 @@ export const Game = () => {
   }
 
   const moveUp = () => {
+    if (!game) return;
     const { x, y } = game!.playerPosition;
     const newPosition = { x, y: y - 1 };
     if (game && y > 0 && isPositionAvailableForMove(newPosition)) {
@@ -35,6 +38,7 @@ export const Game = () => {
   }
 
   const moveDown = () => {
+    if (!game) return;
     const { x, y } = game!.playerPosition;
     const newPosition = { x, y: y + 1 };
     if (game && y < game!.map.height - 1 && isPositionAvailableForMove(newPosition)) {
@@ -43,6 +47,7 @@ export const Game = () => {
   }
 
   const moveRight = () => {
+    if (!game) return;
     const { x, y } = game!.playerPosition;
     const newPosition = { x: x + 1, y };
     if (game && x < game!.map.width - 1 && isPositionAvailableForMove(newPosition)) {
@@ -51,6 +56,7 @@ export const Game = () => {
   }
 
   const moveLeft = () => {
+    if (!game) return;
     const { x, y } = game!.playerPosition;
     const newPosition = { x: x - 1, y };
     if (game && x > 0 && isPositionAvailableForMove(newPosition)) {
@@ -65,21 +71,24 @@ export const Game = () => {
 
   useEffect(() => {
     if (game) {
-      console.log('sendMakeMove');
       gameService.sendMakeMove(game!.playerPosition.x, game!.playerPosition.y);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game?.playerPosition]);
 
   useEffect(() => {
-    if (game && !gameService.isRegisteredOnEnemyPositionsHandler()) {
+    if (game && !gameService.isRegisteredOnEnemyPositionsHandler() && !gameService.isRegisteredOnGameOverHandler()) {
       gameService.registerOnEnemyPositionsHandler((enemyPositions) => {
-        console.log('registerOnEnemyPositionsHandler triggered', game);
-          setGame({ ...game, enemyPositions });
+        setGame({ ...game, enemyPositions });
+      });
+
+      gameService.registerOnGameOverHandler(() => {
+        stopGame()
       });
 
       return () => {
         gameService.removeOnEnemyPositionsHandler();
+        gameService.removeOnGameOverHandler();
       }
     }
   }, [game]);
@@ -87,7 +96,7 @@ export const Game = () => {
   return (
     <div>
       <button onClick={startGame} color="greed">Start Game</button>
-      <button onClick={stopGame} color="red">Stop Game</button>
+      {isGameOver && <p>GAME OVER</p>}
       <GameComponent game={game} />
     </div>
   )

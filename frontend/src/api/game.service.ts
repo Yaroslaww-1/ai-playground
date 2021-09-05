@@ -30,6 +30,7 @@ class GameService {
   }
 
   private async initSocket() {
+    console.log('init socket')
     const connectionString = `${WS_API_URL}/game/`;
     this.ws = new WebSocket(connectionString);
     this.ws.onmessage = this.registerOnMessage;
@@ -60,6 +61,18 @@ class GameService {
 
   removeOnEnemyPositionsHandler() {
     this.handlers.delete('NEW_ENEMY_POSITIONS');
+  }
+
+  registerOnGameOverHandler(callback: () => void) {
+    this.handlers.set('GAME_OVER', callback);
+  }
+
+  isRegisteredOnGameOverHandler() {
+    return this.handlers.has('GAME_OVER');
+  }
+
+  removeOnGameOverHandler() {
+    this.handlers.delete('GAME_OVER');
   }
 
   // Outbound

@@ -37,7 +37,8 @@ class PacmanConsumer(JsonWebsocketConsumer):
         if event == 'STOP':
             AppState.game.stop()
         if event == 'MOVE':
-            AppState.game.set_player_position(payload.x, payload.y)
+            if payload is not None:
+                AppState.game.set_player_position(payload['x'], payload['y'])
 
     def send_message(self, type, payload):
         self.send(text_data=json.dumps({
