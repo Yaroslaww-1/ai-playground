@@ -1,11 +1,12 @@
 import json
 from django.http import JsonResponse
 
-from pacman.domain.map_generator import MapGenerator
+from pacman.domain.map import Map
+from pacman.domain.map_filler import MapFiller
 
 
 def get_map(request):
-    generator = MapGenerator(16, 16)
-    map = generator.generate()
-    print(map)
-    return JsonResponse({'map': map})
+    map = Map(16, 16)
+    map_filler = MapFiller(map)
+    map_filler.fill()
+    return JsonResponse({'map': map.tiles})
