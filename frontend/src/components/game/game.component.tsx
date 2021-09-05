@@ -27,9 +27,9 @@ export const Game = ({ game } : { game: GameModel | null }) => {
   }
 
   return (
-    <div className="game" style={{ maxWidth: `calc(${map?.length} * 70px)` }}>
+    <div className="game" style={{ maxWidth: `calc(${map?.width} * 70px)` }}>
       {
-        map && map.map((row, y) =>
+        map && map.tiles.map((row, y) =>
           row.map((tile, x) => getTileComponent(tile, x, y))
         )
       }

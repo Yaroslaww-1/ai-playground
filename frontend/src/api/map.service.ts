@@ -7,6 +7,6 @@ export class MapService {
   static async getMap(): Promise<Map> {
     const response = await fetch(this.url);
     const data = await response.json();
-    return data.map as Map;
+    return data as Map;
   }
 }

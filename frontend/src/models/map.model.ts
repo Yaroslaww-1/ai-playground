@@ -1,3 +1,7 @@
 import { MapTile } from "./map-tile.enum";
 
-export type Map = MapTile[][];
+export interface Map {
+  tiles: MapTile[][];
+  width: number;
+  height: number;
+}
