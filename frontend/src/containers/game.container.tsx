@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { MapService } from '../api/map.service';
+import { useState, useEffect } from 'react';
+
+import { GameService } from '../api/game.service';
 
 import { Game as GameComponent } from '../components';
 import { Game as GameModel } from '../models/game.model';
@@ -7,23 +8,14 @@ import { Game as GameModel } from '../models/game.model';
 export const Game = () => {
   const [game, setGame] = useState<GameModel | null>(null);
 
-  useEffect(() => {
-    async function fetchGame() {
-      const map = await MapService.getMap();
-      setGame({
-        map,
-        playerPosition: { x: 0, y: 0 },
-        ghostsPositions: [],
-      });
-    }
-
-    fetchGame()
-    
-  }, []);
+  const startGame = async () => {
+    const game = await GameService.startGame();
+    setGame(game);
+  }
 
   return (
     <div>
-      <button>Start Game</button>
+      <button onClick={startGame}>Start Game</button>
       <GameComponent game={game} />
     </div>
   )
