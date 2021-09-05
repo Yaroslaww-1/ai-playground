@@ -3,4 +3,4 @@ class AppState:
 
     @staticmethod
     def set_game(game):
-        game = game
+        AppState.game = game

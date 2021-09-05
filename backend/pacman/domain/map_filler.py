@@ -1,20 +1,11 @@
 import random
 from enum import IntEnum
 
-from pacman.domain.position import Position
-
 
 class MapTileInner(IntEnum):
     EMPTY = 0
     WALL = 1
     EMPTY_BUT_LOCKED = 2
-
-
-class Direction(IntEnum):
-    UP = 0
-    DOWN = 1
-    LEFT = 2
-    RIGHT = 3
 
 
 class MapFiller:
@@ -47,29 +38,13 @@ class MapFiller:
         current_y = y
         for i in range(wall_length):
             self.map.set_tile(current_x, current_y, MapTileInner.WALL)
-            position = self.get_random_adjacent_position(current_x, current_y)
+            position = self.map.get_random_adjacent_position(current_x, current_y)
             if position is None:
                 break
             current_x = position.x
             current_y = position.y
             wall_tiles.append(position)
         self.lock_adjacent_to_wall_positions(wall_tiles)
-
-    def get_random_adjacent_position(self, x, y):
-        directions = [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT]
-        random.shuffle(directions)
-        for direction in directions:
-            # UP and DOWN
-            if direction == Direction.UP and y > 0 and self.map.is_tile_equals(x, y - 1, MapTileInner.EMPTY):
-                return Position(x, y - 1)
-            if direction == Direction.DOWN and y < self.height - 1 and self.map.is_tile_equals(x, y + 1, MapTileInner.EMPTY):
-                return Position(x, y + 1)
-            # LEFT and RIGHT
-            if direction == Direction.RIGHT and x < self.width - 1 and self.map.is_tile_equals(x + 1, y, MapTileInner.EMPTY):
-                return Position(x + 1, y)
-            if direction == Direction.LEFT and x > 0 and self.map.is_tile_equals(x - 1, y, MapTileInner.EMPTY):
-                return Position(x - 1, y)
-        return None
 
     def lock_adjacent_to_wall_positions(self, wall_tiles):
         for tile in wall_tiles:

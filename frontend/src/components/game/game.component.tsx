@@ -17,7 +17,9 @@ export const Game = ({ game } : { game: GameModel | null }) => {
     if (game) {
       setMap(game.map);
     }
-  }, [game])
+  }, [game]);
+
+  console.log(game?.enemyPositions);
 
   const getTileComponent = (tile: MapTile, x: number, y: number) => {
     const commonProps = { key: `${x}-${y}` };
