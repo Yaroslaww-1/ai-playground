@@ -1,3 +1,7 @@
 .player-tile {
-  background-color: blue;
+  background-image: url('./floor.png');
+  background-size: cover;                   
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: transparent;
 }

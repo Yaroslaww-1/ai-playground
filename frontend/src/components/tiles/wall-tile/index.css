@@ -1,3 +1,7 @@
 .wall-tile {
-  background-color: grey;
+  background-image: url('./wall.png');
+  background-size: cover;                   
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: gray;
 }

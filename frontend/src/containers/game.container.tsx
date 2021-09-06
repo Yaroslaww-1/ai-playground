@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 import { gameService } from '../api/game.service';
 
 import { Game as GameComponent } from '../components';
+import { GameOver } from '../components/game-over/game-over';
+import { Score } from '../components/score/score';
+import { StartGame } from '../components/start-game/start-game';
 import { useMoving } from '../hooks/useMoving';
 import { Game as GameModel } from '../models/game.model';
 import { Map } from '../models/map.model';
@@ -61,11 +64,11 @@ export const Game = () => {
   return (
     <div>
       {game 
-        ? <p>{score?.score ?? 0}</p>
-        : <button onClick={startGame} color="greed">Start Game</button>
+        ? <Score score={score?.score ?? 0} />
+        : <StartGame onClick={startGame} />
       }
       {isGameOver 
-        ? <p>GAME OVER</p>
+        ? <GameOver />
         : <GameComponent game={game} score={score} />
       }
     </div>

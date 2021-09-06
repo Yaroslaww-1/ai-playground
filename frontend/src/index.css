@@ -5,6 +5,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-image: url('./space.png');
+  background-size: cover;                   
+  background-repeat: repeat;
+  background-position: center center;
+  background-color: transparent;
 }
 
 code {
