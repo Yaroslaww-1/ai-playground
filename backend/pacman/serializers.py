@@ -29,6 +29,15 @@ class ScoreSerializer():
         }
 
 
+class EnemySerializer():
+    @staticmethod
+    def to_json(enemy):
+        return {
+            'x': enemy.x,
+            'y': enemy.y
+        }
+
+
 class GameSerializer():
     @staticmethod
     def to_json(game):
@@ -36,5 +45,5 @@ class GameSerializer():
             'map': MapSerializer.to_json(game.map),
             'enemyCount': game.enemy_count,
             'playerPosition': PositionSerializer.to_json(game.player_position),
-            'enemyPositions': list(map(PositionSerializer.to_json, game.enemy_positions)),
+            'enemyPositions': list(map(EnemySerializer.to_json, game.enemies)),
         }

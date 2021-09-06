@@ -1,19 +1,14 @@
 from enum import IntEnum
 import random
 
+from pacman.domain.direction_enum import Direction
+from pacman.domain.direction_helper import DirectionHelper
 from pacman.domain.position import Position
 
 
 class MapTile(IntEnum):
     EMPTY = 0
     WALL = 1
-
-
-class Direction(IntEnum):
-    UP = 0
-    DOWN = 1
-    LEFT = 2
-    RIGHT = 3
 
 
 class Map:
@@ -34,18 +29,32 @@ class Map:
     def is_tile_equals(self, x, y, value_to_compare):
         return self.get_tile(x, y) == value_to_compare
 
-    def get_random_adjacent_position(self, x, y):
-        directions = [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT]
-        random.shuffle(directions)
+    def get_random_opened_direction(self, x, y):
+        directions = DirectionHelper.get_random_directions()
         for direction in directions:
-            # UP and DOWN
-            if direction == Direction.UP and y > 0 and self.is_tile_equals(x, y - 1, MapTile.EMPTY):
-                return Position(x, y - 1)
-            if direction == Direction.DOWN and y < self.height - 1 and self.is_tile_equals(x, y + 1, MapTile.EMPTY):
-                return Position(x, y + 1)
-            # LEFT and RIGHT
-            if direction == Direction.RIGHT and x < self.width - 1 and self.is_tile_equals(x + 1, y, MapTile.EMPTY):
-                return Position(x + 1, y)
-            if direction == Direction.LEFT and x > 0 and self.is_tile_equals(x - 1, y, MapTile.EMPTY):
-                return Position(x - 1, y)
+            if self.get_next_position_in_direction(x, y, direction) is not None:
+                return direction
         return None
+
+    def get_all_opened_directions(self, x, y):
+        opened_directions = []
+        directions = DirectionHelper.get_random_directions()
+        for direction in directions:
+            if self.get_next_position_in_direction(x, y, direction) is not None:
+                opened_directions.append(direction)
+        return opened_directions
+
+    def get_next_position_in_direction(self, x, y, direction):
+        if direction == Direction.UP and y > 0 and self.is_tile_equals(x, y - 1, MapTile.EMPTY):
+            return Position(x, y - 1)
+        if direction == Direction.DOWN and y < self.height - 1 and self.is_tile_equals(x, y + 1, MapTile.EMPTY):
+            return Position(x, y + 1)
+        if direction == Direction.RIGHT and x < self.width - 1 and self.is_tile_equals(x + 1, y, MapTile.EMPTY):
+            return Position(x + 1, y)
+        if direction == Direction.LEFT and x > 0 and self.is_tile_equals(x - 1, y, MapTile.EMPTY):
+            return Position(x - 1, y)
+        return None
+
+    def get_random_adjacent_position(self, x, y):
+        direction = self.get_random_opened_direction(x, y)
+        return self.get_next_position_in_direction(x, y, direction)

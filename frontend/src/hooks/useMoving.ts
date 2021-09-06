@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useKeyPress, useInterval } from ".";
+import { GAME_LOOP_INTERVAL } from "../constants/game-settings.constants";
 import { MapTile } from "../models/map-tile.enum";
 import { Map } from "../models/map.model";
 import { Position } from "../models/position.model";
@@ -74,5 +75,5 @@ export const useMoving = (isGameInProgress: boolean, map: Map, updatePosition: (
     } else {
       setIsMoving(false);
     }
-  }, isGameInProgress ? 250 : null);
+  }, isGameInProgress ? GAME_LOOP_INTERVAL : null);
 };
