@@ -38,6 +38,8 @@ class Game:
         self.game_loop.stop()
         self.enemy_positions_changed_listener = lambda x: x
         self.game_over_lister = None
+        self.player_position = self.get_initial_player_position()
+        self.enemy_positions = self.get_initial_enemies_position()
 
     def make_iteration(self):
         new_enemy_positions = []
