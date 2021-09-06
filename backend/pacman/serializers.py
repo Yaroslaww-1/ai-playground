@@ -20,6 +20,15 @@ class MapSerializer():
         }
 
 
+class ScoreSerializer():
+    @staticmethod
+    def to_json(score):
+        return {
+            'score': score.score,
+            'availablePoints': list(map(PositionSerializer.to_json, score.available_points)),
+        }
+
+
 class GameSerializer():
     @staticmethod
     def to_json(game):

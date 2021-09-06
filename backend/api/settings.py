@@ -172,4 +172,4 @@ if DEBUG:
         LOGGING['loggers'][logger]['handlers'] = ['console']
 
 logging.getLogger('requests').setLevel(logging.CRITICAL)
-logging.disable(logging.CRITICAL)
+logging.disable(logging.DEBUG)

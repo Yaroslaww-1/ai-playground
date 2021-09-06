@@ -1,5 +1,6 @@
 import { Game } from "../models/game.model";
 import { Position } from "../models/position.model";
+import { Score } from "../models/score.model";
 import { API_URL, WS_API_URL } from "./constants";
 
 class GameService {
@@ -73,6 +74,18 @@ class GameService {
 
   removeOnGameOverHandler() {
     this.handlers.delete('GAME_OVER');
+  }
+
+  registerOnNewScoreHandler(callback: (score: Score) => void) {
+    this.handlers.set('NEW_SCORE', callback);
+  }
+
+  isRegisteredOnNewScoreHandler() {
+    return this.handlers.has('NEW_SCORE');
+  }
+
+  removeOnNewScoreHandler() {
+    this.handlers.delete('NEW_SCORE');
   }
 
   // Outbound

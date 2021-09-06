@@ -3,6 +3,7 @@ import asyncio
 from pacman.domain.enemy_behavior_random import EnemyBehaviourRandom
 from pacman.domain.position import Position
 from pacman.domain.lib.thread_job import ThreadJob
+from pacman.domain.score import Score
 
 
 class Game:
@@ -15,6 +16,7 @@ class Game:
         self.enemy_behaviour = enemy_behaviour
         self.enemy_positions_changed_listener = lambda x: x
         self.game_over_lister = None
+        self.score = None
 
     def get_initial_player_position(self):
         return Position(0, 0)
@@ -28,9 +30,11 @@ class Game:
             enemy_positions.append(Position(x, y))
         return enemy_positions
 
-    def start(self, enemy_positions_changed_listener, game_over_lister):
+    def start(self, enemy_positions_changed_listener, game_over_lister, score_changed_listener):
         self.enemy_positions_changed_listener = enemy_positions_changed_listener
         self.game_over_lister = game_over_lister
+        self.score = Score(self.map, score_changed_listener)
+
         self.game_loop = ThreadJob(self.make_iteration, 0.25)
         self.game_loop.start()
 
@@ -51,6 +55,7 @@ class Game:
 
     def set_player_position(self, x, y):
         self.player_position = Position(x, y)
+        self.score.handle_player_move(self.player_position)
         self.check_if_game_over()
 
     def check_if_game_over(self):

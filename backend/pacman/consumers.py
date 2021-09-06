@@ -4,7 +4,7 @@ import threading
 from channels.generic.websocket import JsonWebsocketConsumer
 
 from pacman.app_state import AppState
-from pacman.serializers import PositionSerializer
+from pacman.serializers import PositionSerializer, ScoreSerializer
 
 
 class PacmanConsumer(JsonWebsocketConsumer):
@@ -33,7 +33,10 @@ class PacmanConsumer(JsonWebsocketConsumer):
         event = response.get('event', None)
         payload = response.get('payload', None)
         if event == 'START':
-            AppState.game.start(self.send_new_enemy_positions_message, self.send_game_over_message)
+            AppState.game.start(
+                self.send_new_enemy_positions_message,
+                self.send_game_over_message,
+                self.score_changed_listener)
         if event == 'STOP':
             AppState.game.stop()
         if event == 'MOVE':
@@ -51,3 +54,6 @@ class PacmanConsumer(JsonWebsocketConsumer):
 
     def send_game_over_message(self):
         self.send_message('GAME_OVER', {})
+
+    def score_changed_listener(self, new_score):
+        self.send_message('NEW_SCORE', ScoreSerializer.to_json(new_score))

@@ -3,23 +3,27 @@ import { EnemyTile, PlayerTile } from '..';
 
 import { Game as GameModel } from '../../models/game.model';
 import { MapTile } from '../../models/map-tile.enum';
-import { Map } from '../../models/map.model';
+import { Map as MapModel } from '../../models/map.model';
+import { Position } from '../../models/position.model';
+import { Score as ScoreModel } from '../../models/score.model';
 
 import { EmptyTile } from '../tiles/empty-tile/empty-tile.component';
 import { WallTile } from '../tiles/wall-tile/wall-tile.component';
 
 import './index.css';
+import { ScoreHelper } from './score.helper';
 
-export const Game = ({ game } : { game: GameModel | null }) => {
-  const [map, setMap] = useState<Map | null>(null);
+
+
+export const Game = ({ game, score } : { game: GameModel | null, score: ScoreModel | null }) => {
+  const [map, setMap] = useState<MapModel | null>(null);
+  const scoreHelper = new ScoreHelper(score);
 
   useEffect(() => {
     if (game) {
       setMap(game.map);
     }
-  }, [game]);
-
-  console.log(game?.enemyPositions);
+  }, [game]); 
 
   const getTileComponent = (tile: MapTile, x: number, y: number) => {
     const commonProps = { key: `${x}-${y}` };
@@ -33,7 +37,7 @@ export const Game = ({ game } : { game: GameModel | null }) => {
     }
 
     switch (tile) {
-      case MapTile.Empty: return <EmptyTile {...commonProps} />
+      case MapTile.Empty: return <EmptyTile withPoint={isTileWithPoint(x, y)} {...commonProps} />
       case MapTile.Wall: return <WallTile {...commonProps} />
     }
   }
@@ -44,6 +48,11 @@ export const Game = ({ game } : { game: GameModel | null }) => {
 
   const isEnemyTile = (x: number, y: number) => {
     return game?.enemyPositions.some(p => p.x === x && p.y === y);
+  }
+
+  const isTileWithPoint = (x: number, y: number) => {
+    if (!score) return false;
+    return scoreHelper.isPositionWithPoint({ x, y });
   }
 
   return (

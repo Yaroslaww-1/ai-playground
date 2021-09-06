@@ -6,9 +6,11 @@ import { Game as GameComponent } from '../components';
 import { useMoving } from '../hooks/useMoving';
 import { Game as GameModel } from '../models/game.model';
 import { Map } from '../models/map.model';
+import { Score as ScoreModel } from '../models/score.model';
 
 export const Game = () => {
   const [game, setGame] = useState<GameModel | null>(null);
+  const [score, setScore] = useState<ScoreModel | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
 
   const startGame = async () => {
@@ -32,7 +34,10 @@ export const Game = () => {
   }, [game?.playerPosition]);
 
   useEffect(() => {
-    if (game && !gameService.isRegisteredOnEnemyPositionsHandler() && !gameService.isRegisteredOnGameOverHandler()) {
+    const isHandlersNotRegistered = !gameService.isRegisteredOnEnemyPositionsHandler() &&
+      !gameService.isRegisteredOnGameOverHandler() &&
+      !gameService.isRegisteredOnNewScoreHandler();
+    if (game && isHandlersNotRegistered) {
       gameService.registerOnEnemyPositionsHandler((enemyPositions) => {
         setGame({ ...game, enemyPositions });
       });
@@ -41,18 +46,28 @@ export const Game = () => {
         stopGame()
       });
 
+      gameService.registerOnNewScoreHandler((score) => {
+        setScore(score);
+      })
+
       return () => {
         gameService.removeOnEnemyPositionsHandler();
         gameService.removeOnGameOverHandler();
+        gameService.removeOnNewScoreHandler();
       }
     }
   }, [game]);
 
   return (
     <div>
-      <button onClick={startGame} color="greed">Start Game</button>
-      {isGameOver && <p>GAME OVER</p>}
-      <GameComponent game={game} />
+      {game 
+        ? <p>{score?.score ?? 0}</p>
+        : <button onClick={startGame} color="greed">Start Game</button>
+      }
+      {isGameOver 
+        ? <p>GAME OVER</p>
+        : <GameComponent game={game} score={score} />
+      }
     </div>
   )
 }
