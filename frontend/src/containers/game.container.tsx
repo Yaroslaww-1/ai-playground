@@ -7,42 +7,57 @@ import { GameOver } from '../components/game-over/game-over';
 import { Score } from '../components/score/score';
 import { StartGame } from '../components/start-game/start-game';
 import { useMoving } from '../hooks/useMoving';
-import { Game as GameModel } from '../models/game.model';
-import { Map } from '../models/map.model';
+import { Map as MapModel } from '../models/map.model';
+import { Position } from '../models/position.model';
 import { Score as ScoreModel } from '../models/score.model';
 
 export const Game = () => {
-  const [game, setGame] = useState<GameModel | null>(null);
+  const [playerPosition, setPlayerPosition] = useState<Position | null>(null);
+  const [enemyPositions, setEnemyPositions] = useState<Position[]>([]);
+  const [map, setMap] = useState<MapModel | null>(null);
   const [score, setScore] = useState<ScoreModel | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [isGameInProgress, setIsGameInProgress] = useState(false);
 
   const startGame = async () => {
     const game = await gameService.startGame();
-    setGame(game);
+    setIsGameInProgress(true);
+
+    setPlayerPosition(game.playerPosition);
+    setEnemyPositions(game.enemyPositions);
+    setMap(game.map);
   }
 
   const stopGame = async () => {
     await gameService.stopGame();
-    setGame(null);
     setIsGameOver(true);
+    setIsGameInProgress(false);
+
+    setPlayerPosition(null);
+    setEnemyPositions([]);
+    setMap(null);
   }
 
-  useMoving(!!game, game?.map as Map, (position) => setGame({ ...game!, playerPosition: position }));
+  console.log('render');
+
+  useMoving(isGameInProgress, map!, setPlayerPosition);
 
   useEffect(() => {
-    if (game) {
-      gameService.sendMakeMove(game!.playerPosition.x, game!.playerPosition.y);
+    if (isGameInProgress) {
+      gameService.sendMakeMove(playerPosition!.x, playerPosition!.y);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game?.playerPosition]);
+  }, [playerPosition]);
 
   useEffect(() => {
     const isHandlersNotRegistered = !gameService.isRegisteredOnEnemyPositionsHandler() &&
       !gameService.isRegisteredOnGameOverHandler() &&
       !gameService.isRegisteredOnNewScoreHandler();
-    if (game && isHandlersNotRegistered) {
+      console.log(isHandlersNotRegistered);
+    if (isGameInProgress && isHandlersNotRegistered) {
       gameService.registerOnEnemyPositionsHandler((enemyPositions) => {
-        setGame({ ...game, enemyPositions });
+        console.log('setGame');
+        setEnemyPositions(enemyPositions);
       });
 
       gameService.registerOnGameOverHandler(() => {
@@ -52,24 +67,30 @@ export const Game = () => {
       gameService.registerOnNewScoreHandler((score) => {
         setScore(score);
       })
-
-      return () => {
-        gameService.removeOnEnemyPositionsHandler();
-        gameService.removeOnGameOverHandler();
-        gameService.removeOnNewScoreHandler();
-      }
     }
-  }, [game]);
+
+    // return () => {
+    //   gameService.removeOnEnemyPositionsHandler();
+    //   gameService.removeOnGameOverHandler();
+    //   gameService.removeOnNewScoreHandler();
+    // }
+  }, [isGameInProgress]);
+
+  // useEffect(() => {
+    // gameService.removeOnEnemyPositionsHandler();
+    // gameService.removeOnGameOverHandler();
+    // gameService.removeOnNewScoreHandler();
+  // }, [game])
 
   return (
     <div>
-      {game 
+      {isGameInProgress 
         ? <Score score={score?.score ?? 0} />
         : <StartGame onClick={startGame} />
       }
       {isGameOver 
         ? <GameOver />
-        : <GameComponent game={game} score={score} />
+        : <GameComponent playerPosition={playerPosition!} enemyPositions={enemyPositions!} map={map!} score={score} />
       }
     </div>
   )

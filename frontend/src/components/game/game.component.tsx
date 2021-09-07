@@ -13,17 +13,21 @@ import { WallTile } from '../tiles/wall-tile/wall-tile.component';
 import './index.css';
 import { ScoreHelper } from './score.helper';
 
-
-
-export const Game = ({ game, score } : { game: GameModel | null, score: ScoreModel | null }) => {
-  const [map, setMap] = useState<MapModel | null>(null);
+export const Game = (
+  {
+    enemyPositions,
+    map,
+    playerPosition,
+    score
+  } :
+  {
+    enemyPositions: Position[],
+    map: MapModel,
+    playerPosition: Position,
+    score: ScoreModel | null,
+  }
+) => {
   const scoreHelper = new ScoreHelper(score);
-
-  useEffect(() => {
-    if (game) {
-      setMap(game.map);
-    }
-  }, [game]); 
 
   const getTileComponent = (tile: MapTile, x: number, y: number) => {
     const commonProps = { key: `${x}-${y}` };
@@ -43,11 +47,11 @@ export const Game = ({ game, score } : { game: GameModel | null, score: ScoreMod
   }
 
   const isPlayerTile = (x: number, y: number) => {
-    return x === game?.playerPosition.x && y === game.playerPosition.y;
+    return x === playerPosition.x && y === playerPosition.y;
   }
 
   const isEnemyTile = (x: number, y: number) => {
-    return game?.enemyPositions.some(p => p.x === x && p.y === y);
+    return enemyPositions.some(p => p.x === x && p.y === y);
   }
 
   const isTileWithPoint = (x: number, y: number) => {

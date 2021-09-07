@@ -31,7 +31,6 @@ class GameService {
   }
 
   private async initSocket() {
-    console.log('init socket')
     const connectionString = `${WS_API_URL}/game/`;
     this.ws = new WebSocket(connectionString);
     this.ws.onmessage = this.registerOnMessage;
@@ -54,6 +53,7 @@ class GameService {
 
   registerOnEnemyPositionsHandler(callback: (enemies: Position[]) => void) {
     this.handlers.set('NEW_ENEMY_POSITIONS', callback);
+    console.log(this.handlers.get('NEW_ENEMY_POSITIONS'))
   }
 
   isRegisteredOnEnemyPositionsHandler() {

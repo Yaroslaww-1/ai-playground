@@ -5,3 +5,7 @@
   background-position: center center;
   background-color: transparent;
 }
+
+.player-tile > img {
+  z-index: 100;
+}

@@ -60,6 +60,7 @@ class Game:
         self.check_if_game_over()
 
     def check_if_game_over(self):
+        return False
         for enemy in self.enemies:
             enemy_position = enemy.get_position()
             if enemy_position.x == self.player_position.x and enemy_position.y == self.player_position.y:

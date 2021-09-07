@@ -25,6 +25,8 @@ def start_game(request):
     map_filler.fill()
     # Game initialization
     game = Game(map, GAME_LOOP_INTERVAL)
+    if AppState.game:
+        AppState.game.stop()
     AppState.set_game(game)
 
     return JsonResponse(GameSerializer.to_json(game))

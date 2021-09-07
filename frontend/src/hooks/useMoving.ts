@@ -1,17 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useKeyPress, useInterval } from ".";
 import { GAME_LOOP_INTERVAL } from "../constants/game-settings.constants";
+import { Direction } from "../enums/direction.enum";
+import { animateMoving } from "../helpers/animation.helper";
 import { MapTile } from "../models/map-tile.enum";
 import { Map } from "../models/map.model";
 import { Position } from "../models/position.model";
-
-enum Direction {
-  UP,
-  RIGHT,
-  DOWN,
-  LEFT,
-}
 
 export const useMoving = (isGameInProgress: boolean, map: Map, updatePosition: (newPosition: Position) => void) => {
   const [isMoving, setIsMoving] = useState<boolean>(false);
@@ -70,8 +65,10 @@ export const useMoving = (isGameInProgress: boolean, map: Map, updatePosition: (
     const newPosition = move(movingDirection, position.x, position.y);
 
     if (newPosition.x !== position.x || newPosition.y !== position.y) {
-      setPosition(newPosition);
-      updatePosition(newPosition);
+      animateMoving(movingDirection).then(() => {
+        setPosition(newPosition);
+        updatePosition(newPosition);
+      });
     } else {
       setIsMoving(false);
     }
