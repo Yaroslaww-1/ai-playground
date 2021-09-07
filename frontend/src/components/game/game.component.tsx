@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { EnemyTile, PlayerTile } from '..';
+import { Enemy } from '../../models/enemy.model';
 
 import { Game as GameModel } from '../../models/game.model';
 import { MapTile } from '../../models/map-tile.enum';
@@ -15,13 +16,13 @@ import { ScoreHelper } from './score.helper';
 
 export const Game = (
   {
-    enemyPositions,
+    enemies = [],
     map,
     playerPosition,
     score
   } :
   {
-    enemyPositions: Position[],
+    enemies: Enemy[],
     map: MapModel,
     playerPosition: Position,
     score: ScoreModel | null,
@@ -37,7 +38,7 @@ export const Game = (
     }
 
     if (isEnemyTile(x, y)) {
-      return <EnemyTile {...commonProps} />
+      return <EnemyTile enemy={getEnemyOnTile(x, y)} {...commonProps} />
     }
 
     switch (tile) {
@@ -51,7 +52,11 @@ export const Game = (
   }
 
   const isEnemyTile = (x: number, y: number) => {
-    return enemyPositions.some(p => p.x === x && p.y === y);
+    return enemies.some(e => e.x === x && e.y === y);
+  }
+
+  const getEnemyOnTile = (x: number, y: number) => {
+    return enemies.find(e => e.x === x && e.y === y)!;
   }
 
   const isTileWithPoint = (x: number, y: number) => {

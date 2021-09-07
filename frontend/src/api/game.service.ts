@@ -1,5 +1,5 @@
+import { Enemy } from "../models/enemy.model";
 import { Game } from "../models/game.model";
-import { Position } from "../models/position.model";
 import { Score } from "../models/score.model";
 import { API_URL, WS_API_URL } from "./constants";
 
@@ -51,7 +51,7 @@ class GameService {
     })
   }
 
-  registerOnEnemyPositionsHandler(callback: (enemies: Position[]) => void) {
+  registerOnEnemyPositionsHandler(callback: (enemies: Enemy[]) => void) {
     this.handlers.set('NEW_ENEMY_POSITIONS', callback);
     console.log(this.handlers.get('NEW_ENEMY_POSITIONS'))
   }

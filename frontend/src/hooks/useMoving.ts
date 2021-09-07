@@ -65,7 +65,7 @@ export const useMoving = (isGameInProgress: boolean, map: Map, updatePosition: (
     const newPosition = move(movingDirection, position.x, position.y);
 
     if (newPosition.x !== position.x || newPosition.y !== position.y) {
-      animateMoving(movingDirection).then(() => {
+      animateMoving('player', movingDirection).then(() => {
         setPosition(newPosition);
         updatePosition(newPosition);
       });

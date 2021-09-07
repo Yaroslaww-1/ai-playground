@@ -4,7 +4,7 @@ import threading
 from channels.generic.websocket import JsonWebsocketConsumer
 
 from pacman.app_state import AppState
-from pacman.serializers import PositionSerializer, ScoreSerializer
+from pacman.serializers import PositionSerializer, ScoreSerializer, EnemySerializer
 
 
 class PacmanConsumer(JsonWebsocketConsumer):
@@ -49,8 +49,8 @@ class PacmanConsumer(JsonWebsocketConsumer):
             'payload': payload,
         }))
 
-    def send_new_enemy_positions_message(self, new_enemy_positions):
-        self.send_message('NEW_ENEMY_POSITIONS', list(map(PositionSerializer.to_json, new_enemy_positions)))
+    def send_new_enemy_positions_message(self, enemies):
+        self.send_message('NEW_ENEMY_POSITIONS', list(map(EnemySerializer.to_json, enemies)))
 
     def send_game_over_message(self):
         self.send_message('GAME_OVER', {})

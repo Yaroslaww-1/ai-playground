@@ -7,13 +7,14 @@ import { GameOver } from '../components/game-over/game-over';
 import { Score } from '../components/score/score';
 import { StartGame } from '../components/start-game/start-game';
 import { useMoving } from '../hooks/useMoving';
+import { Enemy } from '../models/enemy.model';
 import { Map as MapModel } from '../models/map.model';
 import { Position } from '../models/position.model';
 import { Score as ScoreModel } from '../models/score.model';
 
 export const Game = () => {
   const [playerPosition, setPlayerPosition] = useState<Position | null>(null);
-  const [enemyPositions, setEnemyPositions] = useState<Position[]>([]);
+  const [enemies, setEnemies] = useState<Enemy[]>([]);
   const [map, setMap] = useState<MapModel | null>(null);
   const [score, setScore] = useState<ScoreModel | null>(null);
   const [isGameOver, setIsGameOver] = useState(false);
@@ -24,7 +25,7 @@ export const Game = () => {
     setIsGameInProgress(true);
 
     setPlayerPosition(game.playerPosition);
-    setEnemyPositions(game.enemyPositions);
+    setEnemies(game.enemies);
     setMap(game.map);
   }
 
@@ -34,11 +35,9 @@ export const Game = () => {
     setIsGameInProgress(false);
 
     setPlayerPosition(null);
-    setEnemyPositions([]);
+    setEnemies([]);
     setMap(null);
   }
-
-  console.log('render');
 
   useMoving(isGameInProgress, map!, setPlayerPosition);
 
@@ -55,9 +54,8 @@ export const Game = () => {
       !gameService.isRegisteredOnNewScoreHandler();
       console.log(isHandlersNotRegistered);
     if (isGameInProgress && isHandlersNotRegistered) {
-      gameService.registerOnEnemyPositionsHandler((enemyPositions) => {
-        console.log('setGame');
-        setEnemyPositions(enemyPositions);
+      gameService.registerOnEnemyPositionsHandler((enemies) => {
+        setEnemies(enemies);
       });
 
       gameService.registerOnGameOverHandler(() => {
@@ -90,7 +88,7 @@ export const Game = () => {
       }
       {isGameOver 
         ? <GameOver />
-        : <GameComponent playerPosition={playerPosition!} enemyPositions={enemyPositions!} map={map!} score={score} />
+        : <GameComponent playerPosition={playerPosition!} enemies={enemies!} map={map!} score={score} />
       }
     </div>
   )

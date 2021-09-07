@@ -1,3 +1,5 @@
+import random
+
 from pacman.domain.direction_helper import DirectionHelper
 from pacman.domain.position import Position
 
@@ -7,26 +9,27 @@ class Enemy:
         self.map = map
         self.x = initial_x
         self.y = initial_y
-        self.direction = None
+        self.direction = self.map.get_all_opened_directions(initial_x, initial_y)[0]
         self.steps_from_previous_turn = 0
+        self.id = random.randint(0, 1000000)
 
     def get_next_position(self):
-        opened_directions = self.map.get_all_opened_directions(self.x, self.y)
+        next_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
 
-        if (self.direction is None) or (self.direction not in opened_directions):
-            self.direction = opened_directions[0]
+        print(next_position, self.direction)
+
+        self.steps_from_previous_turn += 1
 
         should_try_to_turn = self.steps_from_previous_turn > 10
         if should_try_to_turn:
             turn_direction = self.get_turn_direction()
             if turn_direction is not None:
                 self.steps_from_previous_turn = 0
-                print("turned", self.direction, turn_direction)
                 self.direction = turn_direction
 
-        next_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
-
-        self.steps_from_previous_turn += 1
+        opened_directions = self.map.get_all_opened_directions(next_position.x, next_position.y)
+        if self.direction not in opened_directions:
+            self.direction = opened_directions[0]
 
         return next_position
 

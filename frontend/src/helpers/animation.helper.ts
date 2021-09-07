@@ -1,7 +1,7 @@
 import { GAME_LOOP_INTERVAL } from "../constants/game-settings.constants";
 import { Direction } from "../enums/direction.enum";
 
-export const animateMoving = (direction: Direction) => {
+export const animateMoving = (elementId: string, direction: Direction) => {
   return new Promise<void>((resolve) => {
     let iteration = 0;
     const ANIMATION_INTERVAL = 10;
@@ -9,7 +9,7 @@ export const animateMoving = (direction: Direction) => {
     const STEP = 70 / (ITERATION_COUNT - 20); // 20 - empirical constant
 
     let interval = setInterval(() => {
-      const playerElement = document.getElementById('player');
+      const playerElement = document.getElementById(elementId);
 
       if (iteration === ITERATION_COUNT || !playerElement) {
         clearInterval(interval);
