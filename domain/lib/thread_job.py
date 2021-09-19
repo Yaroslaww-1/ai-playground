@@ -1,10 +1,10 @@
 import time, threading
 
 
-class ThreadJob(threading.Thread):
-    def __init__(self, action, interval):
+class ThreadJob():
+    def __init__(self, interval):
         self.interval = interval
-        self.action = action
+        self.action = lambda: True
         self.stop_event = threading.Event()
         self.thread = threading.Thread(target=self.set_interval)
 
@@ -14,7 +14,8 @@ class ThreadJob(threading.Thread):
             next_time += self.interval
             self.action()
 
-    def start(self):
+    def start(self, action):
+        self.action = action
         self.thread.start()
 
     def stop(self):

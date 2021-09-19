@@ -5,11 +5,11 @@ from domain.position import Position
 
 
 class Score:
-    def __init__(self, map, score_changed_listener):
+    def __init__(self, map):
         self.map = map
         self.available_points = self.get_initial_available_points()
         self.score = 0
-        self.score_changed_listener = score_changed_listener
+        # self.score_changed_listener = score_changed_listener
 
     def get_initial_available_points(self):
         available_point_coordinates = []
@@ -28,9 +28,9 @@ class Score:
     def set_available_points(self, available_points=[]):
         should_notify = True if numpy.array_equal(self.available_points, available_points) else False
         self.available_points = available_points
-        if should_notify:
-            self.score_changed_listener(self)
+        # if should_notify:
+        #     self.score_changed_listener(self)
 
     def remove_available_point(self, point_position):
         self.available_points.remove(point_position)
-        self.score_changed_listener(self)
+        # self.score_changed_listener(self)

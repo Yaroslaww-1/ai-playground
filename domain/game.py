@@ -1,3 +1,5 @@
+from typing import Callable
+
 from domain.enemy import Enemy
 from domain.position import Position
 from domain.lib.thread_job import ThreadJob
@@ -5,16 +7,16 @@ from domain.score import Score
 
 
 class Game:
-    def __init__(self, map, game_loop_interval, enemy_count=3):
+    def __init__(self, map, game_loop, enemy_count=3):
         self.map = map
         self.enemy_count = enemy_count
         self.player_position = self.get_initial_player_position()
         self.enemies = self.get_initial_enemies()
         self.game_loop = None
-        self.enemy_positions_changed_listener = lambda x: x
-        self.game_over_lister = None
         self.score = None
-        self.game_loop_interval = game_loop_interval
+        self.game_loop = game_loop
+        self.is_game_running = False
+        self.on_iteration = lambda: True
 
     def get_initial_player_position(self):
         return Position(0, 0)
@@ -29,26 +31,26 @@ class Game:
             enemies.append(enemy)
         return enemies
 
-    def start(self, enemy_positions_changed_listener, game_over_lister, score_changed_listener):
-        self.enemy_positions_changed_listener = enemy_positions_changed_listener
-        self.game_over_lister = game_over_lister
-        self.score = Score(self.map, score_changed_listener)
-
-        self.game_loop = ThreadJob(self.make_iteration, self.game_loop_interval)
-        self.game_loop.start()
+    def start(self):
+        self.is_game_running = True
+        self.score = Score(self.map)
+        # self.game_loop.start(self.make_iteration)
 
     def stop(self):
         self.game_loop.stop()
-        self.enemy_positions_changed_listener = lambda x: x
-        self.game_over_lister = None
+        self.is_game_running = False
+        # self.notify_about_iteration()
         self.player_position = self.get_initial_player_position()
         self.enemies = self.get_initial_enemies()
 
     def make_iteration(self):
         for enemy in self.enemies:
             enemy.move_to_next_position()
-        self.enemy_positions_changed_listener(self.enemies)
+        # self.notify_about_iteration()
         self.check_if_game_over()
+
+    # def notify_about_iteration(self):
+    #     self.on_iteration(self.map, self.enemies, self.score, self.is_game_running)
 
     def set_player_position(self, x, y):
         self.player_position = Position(x, y)
@@ -59,5 +61,5 @@ class Game:
         for enemy in self.enemies:
             enemy_position = enemy.get_position()
             if enemy_position.x == self.player_position.x and enemy_position.y == self.player_position.y:
-                self.game_over_lister()
+                # self.stop()
                 return
