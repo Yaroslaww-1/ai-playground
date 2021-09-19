@@ -1,7 +1,7 @@
 import random
 
-from pacman.domain.direction_helper import DirectionHelper
-from pacman.domain.position import Position
+from domain.direction_helper import DirectionHelper
+from domain.position import Position
 
 
 class Enemy:

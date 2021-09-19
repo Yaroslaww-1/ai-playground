@@ -1,9 +1,7 @@
-import asyncio
-
-from pacman.domain.enemy import Enemy
-from pacman.domain.position import Position
-from pacman.domain.lib.thread_job import ThreadJob
-from pacman.domain.score import Score
+from domain.enemy import Enemy
+from domain.position import Position
+from domain.lib.thread_job import ThreadJob
+from domain.score import Score
 
 
 class Game:

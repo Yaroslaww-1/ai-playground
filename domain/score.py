@@ -1,7 +1,7 @@
 import numpy
 
-from pacman.domain.map import MapTile
-from pacman.domain.position import Position
+from domain.map import MapTile
+from domain.position import Position
 
 
 class Score:

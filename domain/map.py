@@ -1,9 +1,8 @@
 from enum import IntEnum
-import random
 
-from pacman.domain.direction_enum import Direction
-from pacman.domain.direction_helper import DirectionHelper
-from pacman.domain.position import Position
+from domain.direction_enum import Direction
+from domain.direction_helper import DirectionHelper
+from domain.position import Position
 
 
 class MapTile(IntEnum):

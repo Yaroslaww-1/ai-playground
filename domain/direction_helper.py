@@ -1,6 +1,6 @@
 import random
 
-from pacman.domain.direction_enum import Direction
+from domain.direction_enum import Direction
 
 
 class DirectionHelper:
