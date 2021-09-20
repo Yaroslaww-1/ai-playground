@@ -47,6 +47,23 @@ class Search:
         self.end_timer()
         return self.get_path(parents, ending_vertex)
 
+    def dfs(self, starting_vertex, ending_vertex):
+        self.start_timer()
+
+        stack = [starting_vertex]
+        visited = {starting_vertex: True}
+        parents = {starting_vertex: None}
+        while len(stack) > 0:
+            current = stack.pop()  # Take LAST element because it is stack
+            for connected_vertex in self.graph.get_vertex_connections(current):
+                if visited.get(connected_vertex) is None:
+                    visited[connected_vertex] = True
+                    parents[connected_vertex] = current
+                    stack.append(connected_vertex)
+
+        self.end_timer()
+        return self.get_path(parents, ending_vertex)
+
     def get_path(self, parents, ending_vertex):
         path = []
         current = ending_vertex
