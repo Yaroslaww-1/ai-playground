@@ -25,7 +25,7 @@ class Game:
         self.is_game_running = False
         self.is_game_over = False
         self.on_iteration = lambda: True
-        self.search_algorithm = SearchAlgorithm.DFS
+        self.search_algorithm = SearchAlgorithm.UCS
 
     def get_initial_player_position(self):
         return Position(0, 0)

@@ -39,3 +39,7 @@ class Player(Character):
         if search_algorithm == SearchAlgorithm.DFS:
             for enemy in enemies:
                 self.paths_to_enemies += self.search.dfs(Position(self.x, self.y), Position(enemy.x, enemy.y))
+
+        if search_algorithm == SearchAlgorithm.UCS:
+            for enemy in enemies:
+                self.paths_to_enemies += self.search.ucs(Position(self.x, self.y), Position(enemy.x, enemy.y))

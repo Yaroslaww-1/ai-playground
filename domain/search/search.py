@@ -1,3 +1,4 @@
+import queue
 from timeit import default_timer as timer
 
 from domain.map import MapTile
@@ -63,6 +64,34 @@ class Search:
 
         self.end_timer()
         return self.get_path(parents, ending_vertex)
+
+    def ucs(self, starting_vertex, ending_vertex):
+        self.start_timer()
+
+        priority_queue = queue.PriorityQueue()
+        priority_queue.put((0, starting_vertex, [starting_vertex]))
+        visited = {starting_vertex: True}
+        dist = {starting_vertex: 0}
+        path = []
+        while not priority_queue.empty():
+            cost, current, current_path = priority_queue.get()
+            visited[current] = True
+
+            if cost > dist[current]:
+                continue
+
+            if current == ending_vertex:
+                path = current_path
+                break
+
+            for connected_vertex in self.graph.get_vertex_connections(current):
+                if visited.get(connected_vertex) is None:
+                    visited[connected_vertex] = True
+                    dist[connected_vertex] = dist[current] + 1
+                    priority_queue.put((cost + 1, connected_vertex, current_path + [connected_vertex]))
+
+        self.end_timer()
+        return path
 
     def get_path(self, parents, ending_vertex):
         path = []
