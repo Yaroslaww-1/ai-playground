@@ -10,6 +10,10 @@ class AlgorithmDrawer:
         algorithm = ''
         if game.search_algorithm == SearchAlgorithm.BFS:
             algorithm = 'BFS'
+        if game.search_algorithm == SearchAlgorithm.DFS:
+            algorithm = 'DFS'
+        if game.search_algorithm == SearchAlgorithm.UCS:
+            algorithm = 'UCS'
         time = game.player.search.last_search_time
         self.draw_helper.draw_text(0, game.map.height * UNIT_IN_PX - 50, f'Algorithm: {algorithm} Time: {time}ms')
 

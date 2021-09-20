@@ -94,3 +94,6 @@ class Game:
         characters = self.enemies
         characters.append(self.player)
         return characters
+
+    def switch_search_algorithm(self):
+        self.search_algorithm = (self.search_algorithm + 1) % 3

@@ -45,7 +45,8 @@ def run_game():
     is_game_running = True
     ticks = 0
     pressed_keys = []
-    handled_key_press = False
+    handled_pressed_keys = set()
+    ticks_from_previous_algorithm_switch = 0
     while is_game_running:
         pygame.time.delay(GAME_LOOP_INTERVAL_TICK)
 
@@ -54,25 +55,31 @@ def run_game():
             game.make_iteration()
 
             for keys in pressed_keys:
-                if keys[pygame.K_LEFT] and not handled_key_press:
+                if keys[pygame.K_LEFT] and 'move' not in handled_pressed_keys:
                     game.player.set_direction(Direction.LEFT)
-                    handled_key_press = True
-                elif keys[pygame.K_RIGHT] and not handled_key_press:
+                    handled_pressed_keys.add('move')
+                elif keys[pygame.K_RIGHT] and 'move' not in handled_pressed_keys:
                     game.player.set_direction(Direction.RIGHT)
-                    handled_key_press = True
-                elif keys[pygame.K_UP] and not handled_key_press:
+                    handled_pressed_keys.add('move')
+                elif keys[pygame.K_UP] and 'move' not in handled_pressed_keys:
                     game.player.set_direction(Direction.UP)
-                    handled_key_press = True
-                elif keys[pygame.K_DOWN] and not handled_key_press:
+                    handled_pressed_keys.add('move')
+                elif keys[pygame.K_DOWN] and 'move' not in handled_pressed_keys:
                     game.player.set_direction(Direction.DOWN)
-                    handled_key_press = True
+                    handled_pressed_keys.add('move')
+                elif keys[pygame.K_z] and 'algorithm_switch' not in handled_pressed_keys and \
+                        ticks_from_previous_algorithm_switch > 100:
+                    game.switch_search_algorithm()
+                    ticks_from_previous_algorithm_switch = 0
+                    handled_pressed_keys.add('algorithm_switch')
 
             pressed_keys = []
-            handled_key_press = False
+            handled_pressed_keys.clear()
 
         game_drawer.draw_game(game, ticks)
 
         ticks += 1
+        ticks_from_previous_algorithm_switch += 1
 
         # Handle user input
         keys = key.get_pressed()
