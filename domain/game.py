@@ -44,8 +44,6 @@ class Game:
         self.is_game_running = True
         self.score.reset()
         self.is_game_over = False
-        # self.player.set_position(self.get_initial_player_position())
-        # self.enemies = self.get_initial_enemies()
 
     def stop(self):
         self.game_loop.stop()
@@ -59,12 +57,8 @@ class Game:
         for enemy in self.enemies:
             enemy.move_to_next_position()
         self.player.move_to_next_position()
-        # self.notify_about_iteration()
         self.player.calculate_paths_to_enemies(self.enemies, self.search_algorithm)
         self.check_if_game_over()
-
-    # def notify_about_iteration(self):
-    #     self.on_iteration(self.map, self.enemies, self.score, self.is_game_running)
 
     def handle_player_move(self):
         if not self.is_game_running:

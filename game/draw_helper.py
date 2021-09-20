@@ -13,7 +13,7 @@ class DrawHelper:
             f'{ASSETS_FOLDER_PATH}/empty.png',
             f'{ASSETS_FOLDER_PATH}/wall.png',
             f'{ASSETS_FOLDER_PATH}/enemy/enemy.png',
-            f'{ASSETS_FOLDER_PATH}/player/left1.png',
+            f'{ASSETS_FOLDER_PATH}/player/player.png',
         ]
         self.images = list(map(lambda x: pygame.transform.scale(image.load(x), (UNIT_IN_PX, UNIT_IN_PX)),
                                paths
@@ -38,7 +38,6 @@ class DrawHelper:
         self.draw(1, x, y)
 
     def draw_food(self, x, y):
-        # self.draw_transparent(0, x, y)
         pygame.draw.circle(self.window, (255, 255, 255), (x + UNIT_IN_PX / 2, y + UNIT_IN_PX / 2), 4)
 
     def draw_enemy(self, x, y):
