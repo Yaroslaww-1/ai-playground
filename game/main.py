@@ -39,6 +39,8 @@ def run_game():
     game.start()
     is_game_running = True
     ticks = 0
+    pressed_keys = []
+    handled_key_press = False
     while is_game_running:
         pygame.time.delay(GAME_LOOP_INTERVAL_TICK)
 
@@ -46,20 +48,30 @@ def run_game():
             ticks = 0
             game.make_iteration()
 
-            # Handle user input
-            keys = key.get_pressed()
-            if keys[pygame.K_LEFT]:
-                game.player.set_direction(Direction.LEFT)
-            elif keys[pygame.K_RIGHT]:
-                game.player.set_direction(Direction.RIGHT)
-            elif keys[pygame.K_UP]:
-                game.player.set_direction(Direction.UP)
-            elif keys[pygame.K_DOWN]:
-                game.player.set_direction(Direction.DOWN)
+            for keys in pressed_keys:
+                if keys[pygame.K_LEFT] and not handled_key_press:
+                    game.player.set_direction(Direction.LEFT)
+                    handled_key_press = True
+                elif keys[pygame.K_RIGHT] and not handled_key_press:
+                    game.player.set_direction(Direction.RIGHT)
+                    handled_key_press = True
+                elif keys[pygame.K_UP] and not handled_key_press:
+                    game.player.set_direction(Direction.UP)
+                    handled_key_press = True
+                elif keys[pygame.K_DOWN] and not handled_key_press:
+                    game.player.set_direction(Direction.DOWN)
+                    handled_key_press = True
+
+            pressed_keys = []
+            handled_key_press = False
 
         game_drawer.draw_game(game, ticks)
 
         ticks += 1
+
+        # Handle user input
+        keys = key.get_pressed()
+        pressed_keys.append(keys)
 
         # Handle window close
         for event in events.get():
