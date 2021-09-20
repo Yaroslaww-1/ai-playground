@@ -13,10 +13,6 @@ class CharacterDrawer:
         self.drawer_helper = drawer_helper
 
     def draw_character(self, ticks):
-        # already_moved_in_px = abs((x - (character.x / UNIT_IN_PX) * UNIT_IN_PX) +
-        #                           (y - (character.y / UNIT_IN_PX) * UNIT_IN_PX))
-
-        # movement_in_px = (UNIT_IN_PX - already_moved_in_px) / GAME_LOOP_INTERVAL_IN_TICKS
         movement_in_px = ticks * MOVE_PX_PER_TICK
 
         x = self.character.x * UNIT_IN_PX

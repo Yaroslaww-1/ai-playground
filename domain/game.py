@@ -5,6 +5,7 @@ from domain.player import Player
 from domain.position import Position
 from domain.lib.thread_job import ThreadJob
 from domain.score import Score
+from domain.search.search_algorithm_enum import SearchAlgorithm
 
 
 class Game:
@@ -24,6 +25,7 @@ class Game:
         self.is_game_running = False
         self.is_game_over = False
         self.on_iteration = lambda: True
+        self.search_algorithm = SearchAlgorithm.BFS
 
     def get_initial_player_position(self):
         return Position(0, 0)
@@ -58,6 +60,7 @@ class Game:
             enemy.move_to_next_position()
         self.player.move_to_next_position()
         # self.notify_about_iteration()
+        self.player.calculate_paths_to_enemies(self.enemies, self.search_algorithm)
         self.check_if_game_over()
 
     # def notify_about_iteration(self):

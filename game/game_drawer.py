@@ -2,11 +2,12 @@ from pygame import display
 
 
 class GameDrawer:
-    def __init__(self, map_drawer, enemy_drawers, player_drawer, score_drawer):
+    def __init__(self, map_drawer, enemy_drawers, player_drawer, score_drawer, algorithm_drawer):
         self.map_drawer = map_drawer
         self.enemy_drawers = enemy_drawers
         self.player_drawer = player_drawer
         self.score_drawer = score_drawer
+        self.algorithm_drawer = algorithm_drawer
 
     def draw_game(self, game, ticks):
         self.map_drawer.draw_map(game.map)
@@ -23,5 +24,8 @@ class GameDrawer:
             self.score_drawer.draw_game_over(game)
         else:
             self.score_drawer.draw_score(game)
+
+        self.algorithm_drawer.draw_algorithm_info(game)
+        self.algorithm_drawer.draw_path(game.player)
 
         display.update()

@@ -50,3 +50,9 @@ class DrawHelper:
     def draw_text(self, x, y, text):
         textsurface = self.font.render(text, False, (255, 255, 255))
         self.window.blit(textsurface, (x, y))
+
+    def draw_path_tile(self, x, y):
+        surface = pygame.Surface((UNIT_IN_PX, UNIT_IN_PX))
+        surface.set_alpha(64)
+        surface.fill((255, 255, 255))
+        self.window.blit(surface, (x * UNIT_IN_PX, y * UNIT_IN_PX))

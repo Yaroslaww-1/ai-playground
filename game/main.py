@@ -9,6 +9,7 @@ from domain.map_filler import MapFiller
 
 from draw_helper import DrawHelper
 from game.enemy_drawer import EnemyDrawer
+from game.algorithm_drawer import AlgorithmDrawer
 from game.player_drawer import PlayerDrawer
 from game.score_drawer import ScoreDrawer
 from game_drawer import GameDrawer
@@ -34,8 +35,9 @@ game = Game(game_map, game_loop)
 enemy_drawers = list(map(lambda e: EnemyDrawer(e, draw_helper), game.enemies))
 player_drawer = PlayerDrawer(game.player, draw_helper)
 score_drawer = ScoreDrawer(game.score, draw_helper)
+algorithm_drawer = AlgorithmDrawer(draw_helper)
 
-game_drawer = GameDrawer(map_drawer, enemy_drawers, player_drawer, score_drawer)
+game_drawer = GameDrawer(map_drawer, enemy_drawers, player_drawer, score_drawer, algorithm_drawer)
 
 
 def run_game():
