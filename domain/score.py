@@ -33,4 +33,7 @@ class Score:
 
     def remove_available_point(self, point_position):
         self.available_points.remove(point_position)
-        # self.score_changed_listener(self)
+
+    def reset(self):
+        self.available_points = self.get_initial_available_points()
+        self.score = 0

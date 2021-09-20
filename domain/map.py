@@ -63,3 +63,6 @@ class Map:
             return True
         else:
             return False
+
+    def is_tile_empty(self, x, y):
+        return self.get_tile(x, y) == MapTile.EMPTY

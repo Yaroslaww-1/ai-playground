@@ -39,7 +39,7 @@ class Game:
 
     def start(self):
         self.is_game_running = True
-        self.score = Score(self.map)
+        self.score.reset()
         # self.game_loop.start(self.make_iteration)
 
     def stop(self):
@@ -69,3 +69,18 @@ class Game:
             if enemy_position.x == self.player.x and enemy_position.y == self.player.y:
                 # self.stop()
                 return
+
+    def is_tile_without_character_or_wall(self, x, y):
+        for enemy in self.enemies:
+            if enemy.x == x and enemy.y == y:
+                return False
+        if self.player.x == x and self.player.y == y:
+            return False
+        if not self.map.is_tile_empty(x, y):
+            return False
+        return True
+
+    def get_characters(self):
+        characters = self.enemies
+        characters.append(self.player)
+        return characters

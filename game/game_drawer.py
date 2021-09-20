@@ -13,5 +13,5 @@ class GameDrawer:
         for enemy_drawer in self.enemy_drawers:
             enemy_drawer.draw_enemy(ticks)
         self.player_drawer.draw_player(ticks)
-        self.score_drawer.draw_score()
+        self.score_drawer.draw_score(game)
         display.update()
