@@ -5,8 +5,9 @@ from game_settings import ASSETS_FOLDER_PATH, UNIT_IN_PX
 
 
 class DrawHelper:
-    def __init__(self, window):
+    def __init__(self, window, font):
         self.window = window
+        self.font = font
 
         paths = [
             f'{ASSETS_FOLDER_PATH}/empty.png',
@@ -36,3 +37,7 @@ class DrawHelper:
 
     def draw_player(self, x, y):
         self.draw(4, x, y)
+
+    def draw_text(self, x, y, text):
+        textsurface = self.font.render(text, False, (255, 255, 255))
+        self.window.blit(textsurface, (x, y))

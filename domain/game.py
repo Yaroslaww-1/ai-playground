@@ -19,7 +19,7 @@ class Game:
         )
         self.enemies = self.get_initial_enemies()
         self.game_loop = None
-        self.score = None
+        self.score = Score(self.map)
         self.game_loop = game_loop
         self.is_game_running = False
         self.on_iteration = lambda: True
