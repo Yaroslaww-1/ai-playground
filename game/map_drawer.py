@@ -13,7 +13,6 @@ class MapDrawer:
             for x in range(map.width):
                 tile = map.get_tile(x, y)
                 self.draw_tile(tile, x * UNIT_IN_PX, y * UNIT_IN_PX)
-        display.update()
 
     def draw_tile(self, tile, x, y):
         if tile == MapTile.EMPTY:

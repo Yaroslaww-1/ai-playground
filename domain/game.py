@@ -1,6 +1,7 @@
 from typing import Callable
 
 from domain.enemy import Enemy
+from domain.player import Player
 from domain.position import Position
 from domain.lib.thread_job import ThreadJob
 from domain.score import Score
@@ -10,7 +11,12 @@ class Game:
     def __init__(self, map, game_loop, enemy_count=3):
         self.map = map
         self.enemy_count = enemy_count
-        self.player_position = self.get_initial_player_position()
+        self.player = Player(
+            map,
+            self.get_initial_player_position().x,
+            self.get_initial_player_position().y,
+            self.handle_player_move
+        )
         self.enemies = self.get_initial_enemies()
         self.game_loop = None
         self.score = None
@@ -40,26 +46,26 @@ class Game:
         self.game_loop.stop()
         self.is_game_running = False
         # self.notify_about_iteration()
-        self.player_position = self.get_initial_player_position()
+        self.player.set_position(self.get_initial_player_position().x, self.get_initial_player_position().y)
         self.enemies = self.get_initial_enemies()
 
     def make_iteration(self):
         for enemy in self.enemies:
             enemy.move_to_next_position()
+        self.player.move_to_next_position()
         # self.notify_about_iteration()
         self.check_if_game_over()
 
     # def notify_about_iteration(self):
     #     self.on_iteration(self.map, self.enemies, self.score, self.is_game_running)
 
-    def set_player_position(self, x, y):
-        self.player_position = Position(x, y)
-        self.score.handle_player_move(self.player_position)
+    def handle_player_move(self):
+        self.score.handle_player_move(self.player.x, self.player.y)
         self.check_if_game_over()
 
     def check_if_game_over(self):
         for enemy in self.enemies:
             enemy_position = enemy.get_position()
-            if enemy_position.x == self.player_position.x and enemy_position.y == self.player_position.y:
+            if enemy_position.x == self.player.x and enemy_position.y == self.player.y:
                 # self.stop()
                 return

@@ -19,9 +19,9 @@ class Score:
                     available_point_coordinates.append(Position(x, y))
         return available_point_coordinates
 
-    def handle_player_move(self, player_position):
+    def handle_player_move(self, player_x, player_y):
         for available_point in self.available_points:
-            if available_point.x == player_position.x and available_point.y == player_position.y:
+            if available_point.x == player_x and available_point.y == player_y:
                 self.remove_available_point(available_point)
                 self.score += 1
 

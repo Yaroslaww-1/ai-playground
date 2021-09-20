@@ -1,22 +1,21 @@
 import random
 
+from domain.character import Character
 from domain.direction_helper import DirectionHelper
 from domain.position import Position
 
 
-class Enemy:
+class Enemy(Character):
     def __init__(self, map, initial_x, initial_y):
+        super().__init__(map, initial_x, initial_y)
         self.map = map
-        self.x = initial_x
-        self.y = initial_y
         self.direction = self.map.get_all_opened_directions(initial_x, initial_y)[0]
         self.steps_from_previous_turn = 0
         self.id = random.randint(0, 1000000)
+        self.is_moving = True
 
     def get_next_position(self):
         next_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
-
-        print(next_position, self.direction)
 
         self.steps_from_previous_turn += 1
 
@@ -41,14 +40,3 @@ class Enemy:
             if DirectionHelper.is_directions_reverse(self.direction, opened_direction) is False:
                 return opened_direction
         return None
-
-    def set_position(self, position):
-        self.x = position.x
-        self.y = position.y
-
-    def move_to_next_position(self):
-        next_position = self.get_next_position()
-        self.set_position(next_position)
-
-    def get_position(self):
-        return Position(self.x, self.y)

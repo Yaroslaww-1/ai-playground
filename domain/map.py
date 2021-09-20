@@ -44,16 +44,22 @@ class Map:
         return opened_directions
 
     def get_next_position_in_direction(self, x, y, direction):
-        if direction == Direction.UP and y > 0 and self.is_tile_equals(x, y - 1, MapTile.EMPTY):
+        if direction == Direction.UP and self.is_position_exist(x, y - 1) and self.is_tile_equals(x, y - 1, MapTile.EMPTY):
             return Position(x, y - 1)
-        if direction == Direction.DOWN and y < self.height - 1 and self.is_tile_equals(x, y + 1, MapTile.EMPTY):
+        if direction == Direction.DOWN and self.is_position_exist(x, y + 1) and self.is_tile_equals(x, y + 1, MapTile.EMPTY):
             return Position(x, y + 1)
-        if direction == Direction.RIGHT and x < self.width - 1 and self.is_tile_equals(x + 1, y, MapTile.EMPTY):
+        if direction == Direction.RIGHT and self.is_position_exist(x + 1, y) and self.is_tile_equals(x + 1, y, MapTile.EMPTY):
             return Position(x + 1, y)
-        if direction == Direction.LEFT and x > 0 and self.is_tile_equals(x - 1, y, MapTile.EMPTY):
+        if direction == Direction.LEFT and self.is_position_exist(x - 1, y) and self.is_tile_equals(x - 1, y, MapTile.EMPTY):
             return Position(x - 1, y)
         return None
 
     def get_random_adjacent_position(self, x, y):
         direction = self.get_random_opened_direction(x, y)
         return self.get_next_position_in_direction(x, y, direction)
+
+    def is_position_exist(self, x, y):
+        if 0 <= y <= self.height - 1 and 0 <= x <= self.width - 1:
+            return True
+        else:
+            return False

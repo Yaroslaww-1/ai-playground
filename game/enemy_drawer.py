@@ -1,9 +1,13 @@
-import pygame
-import pygame.event as events
+from pygame import display
 
-class EnemyDrawer:
-    def __init__(self, map_drawer):
-        self.map_drawer = map_drawer
+from game.character_drawer import CharacterDrawer
 
-    def draw_game(self, game):
-        self.map_drawer.draw_map(game.map)
+
+class EnemyDrawer(CharacterDrawer):
+    def __init__(self, enemy, drawer_helper):
+        super().__init__(enemy, drawer_helper)
+        self.enemy = enemy
+        self.drawer_helper = drawer_helper
+
+    def draw_enemy(self, ticks):
+        self.draw_character(ticks)
