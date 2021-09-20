@@ -22,6 +22,7 @@ class Game:
         self.score = Score(self.map)
         self.game_loop = game_loop
         self.is_game_running = False
+        self.is_game_over = False
         self.on_iteration = lambda: True
 
     def get_initial_player_position(self):
@@ -40,16 +41,19 @@ class Game:
     def start(self):
         self.is_game_running = True
         self.score.reset()
-        # self.game_loop.start(self.make_iteration)
+        self.is_game_over = False
+        # self.player.set_position(self.get_initial_player_position())
+        # self.enemies = self.get_initial_enemies()
 
     def stop(self):
         self.game_loop.stop()
         self.is_game_running = False
-        # self.notify_about_iteration()
-        self.player.set_position(self.get_initial_player_position().x, self.get_initial_player_position().y)
+        self.player.reset_position()
         self.enemies = self.get_initial_enemies()
 
     def make_iteration(self):
+        if not self.is_game_running:
+            return
         for enemy in self.enemies:
             enemy.move_to_next_position()
         self.player.move_to_next_position()
@@ -60,6 +64,8 @@ class Game:
     #     self.on_iteration(self.map, self.enemies, self.score, self.is_game_running)
 
     def handle_player_move(self):
+        if not self.is_game_running:
+            return
         self.score.handle_player_move(self.player.x, self.player.y)
         self.check_if_game_over()
 
@@ -67,7 +73,8 @@ class Game:
         for enemy in self.enemies:
             enemy_position = enemy.get_position()
             if enemy_position.x == self.player.x and enemy_position.y == self.player.y:
-                # self.stop()
+                self.is_game_over = True
+                self.stop()
                 return
 
     def is_tile_without_character_or_wall(self, x, y):

@@ -12,9 +12,16 @@ class Player(Character):
         self.map = map
         self.on_move = on_move
         self.is_moving = True
+        self.initial_x = initial_x
+        self.initial_y = initial_y
         self.direction = Direction.RIGHT
 
     def set_position(self, position):
         self.x = position.x
         self.y = position.y
         self.on_move()
+
+    def reset_position(self):
+        self.x = self.initial_x
+        self.y = self.initial_y
+        self.direction = Direction.RIGHT

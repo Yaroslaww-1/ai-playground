@@ -21,3 +21,6 @@ class ScoreDrawer:
             #         is_enemy_not_moving_in_tile = False
             if is_tile_without_character_or_wall:
                 self.drawer_helper.draw_food(available_point.x * UNIT_IN_PX, available_point.y * UNIT_IN_PX)
+
+    def draw_game_over(self, game):
+        self.drawer_helper.draw_text(0, 0, f'Game over')

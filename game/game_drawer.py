@@ -10,8 +10,18 @@ class GameDrawer:
 
     def draw_game(self, game, ticks):
         self.map_drawer.draw_map(game.map)
+
+        if not game.is_game_running:
+            ticks = 0
+
         for enemy_drawer in self.enemy_drawers:
             enemy_drawer.draw_enemy(ticks)
+
         self.player_drawer.draw_player(ticks)
-        self.score_drawer.draw_score(game)
+
+        if game.is_game_over:
+            self.score_drawer.draw_game_over(game)
+        else:
+            self.score_drawer.draw_score(game)
+
         display.update()
