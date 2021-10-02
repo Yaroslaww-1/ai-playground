@@ -95,9 +95,9 @@ class Search:
         self.end_timer()
         return path
 
-    def a_star(self, starting_position: Position, ending_position: Position) -> List[Position]:
+    def a_star(self, starting_position: Position, ending_position: Position, avoid_positions: List[Position]) -> List[Position]:
         a_star = AStar(self.map, self.graph)
-        return a_star.calculate_path(starting_position, ending_position)
+        return a_star.calculate_path(starting_position, ending_position, avoid_positions)
 
     def get_path(self, parents, ending_vertex):
         path = []

@@ -1,4 +1,5 @@
 import queue
+import sys
 from typing import List, Optional
 
 from domain.map import Map
@@ -27,7 +28,7 @@ class AStar:
         self.map = map
         self.graph = graph
 
-    def calculate_path(self, starting_position: Position, ending_position: Position) -> List[Position]:
+    def calculate_path(self, starting_position: Position, ending_position: Position, avoid_positions: List[Position]) -> List[Position]:
         start_vertex = VertexWithAStarInfo(None, starting_position)
         end_vertex = VertexWithAStarInfo(None, ending_position)
 
@@ -59,10 +60,25 @@ class AStar:
                 if visited_positions.get(open_vertex.position) is not None:
                     continue
                 open_vertex.g = current_vertex.g + 1
-                open_vertex.h = self.get_euclidean_distance(open_vertex.position, end_vertex.position)
+                euclidean_heuristic = self.get_euclidean_distance(open_vertex.position, end_vertex.position)
+                distance_to_closest_avoid_position = self.get_euclidean_distance(open_vertex.position, self.get_closest_avoid_position(starting_position, avoid_positions))
+                avoid_positions_sensing_heuristic = (self.map.width * self.map.height - distance_to_closest_avoid_position) * 5
+                open_vertex.h = euclidean_heuristic + avoid_positions_sensing_heuristic
                 open_vertex.f = open_vertex.g + open_vertex.h
 
                 open_vertices.put(open_vertex)
 
     def get_euclidean_distance(self, position1: Position, position2: Position):
         return (position1.x - position2.x) ** 2 + (position1.y - position2.y) ** 2
+
+    def get_closest_avoid_position(self, current_position: Position, avoid_positions: List[Position]) -> Position:
+        min_dist = self.get_euclidean_distance(current_position, avoid_positions[0])
+        min_dist_position = avoid_positions[0]
+
+        for avoid_position in avoid_positions:
+            dist = self.get_euclidean_distance(current_position, avoid_position)
+            if dist < min_dist:
+                min_dist = dist
+                min_dist_position = avoid_position
+
+        return min_dist_position

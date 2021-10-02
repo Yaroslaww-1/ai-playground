@@ -4,6 +4,7 @@ from typing import List, Optional
 from domain.character import Character
 from domain.direction_enum import Direction
 from domain.direction_helper import DirectionHelper
+from domain.enemy import Enemy
 from domain.position import Position
 from domain.search.search import Search
 from domain.search.search_algorithm_enum import SearchAlgorithm
@@ -45,13 +46,17 @@ class Player(Character):
             for enemy in enemies:
                 self.paths_to_enemies += self.search.ucs(Position(self.x, self.y), Position(enemy.x, enemy.y))
 
-    def get_next_direction(self, enemies, available_food: List[Position]) -> Optional[Direction]:
+    def get_next_direction(self, enemies: List[Enemy], available_food: List[Position]) -> Direction:
         random_food_position = random.choice(available_food)
-        optimal_path = self.search.a_star(Position(self.x, self.y), Position(random_food_position.x, random_food_position.y))
+        optimal_path = self.search.a_star(
+            Position(self.x, self.y),
+            Position(random_food_position.x, random_food_position.y),
+            list(map(lambda enemy: Position(enemy.x, enemy.y), enemies))
+        )
         for next_position in optimal_path:
             if next_position.x != self.x or next_position.y != self.y:
                 return self.map.get_direction_from_to_positions(self.x, self.y, next_position.x, next_position.y)
-        return None
+        return self.map.get_direction_from_to_positions(self.x, self.y, optimal_path[0].x, optimal_path[0].y)
 
     def get_next_position(self):
         if self.is_moving and self.can_move_in_direction():
