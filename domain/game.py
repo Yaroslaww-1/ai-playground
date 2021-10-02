@@ -55,7 +55,7 @@ class Game:
         if not self.is_game_running:
             return
         for enemy in self.enemies:
-            enemy.move_to_next_position()
+            enemy.move_to_next_position(self.player)
         self.player.move_to_next_position()
         self.player.calculate_paths_to_enemies(self.enemies, self.search_algorithm)
         self.check_if_game_over()

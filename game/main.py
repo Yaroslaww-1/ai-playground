@@ -16,7 +16,7 @@ from game_drawer import GameDrawer
 from game_loop import GameLoop
 from map_drawer import MapDrawer
 from game_settings import MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES, MAP_WIDTH_IN_PX, MAP_HEIGHT_IN_PX, \
-    GAME_LOOP_INTERVAL_TICK, GAME_LOOP_INTERVAL_IN_TICKS, GAME_LOOP_INTERVAL
+    GAME_LOOP_INTERVAL_TICK, GAME_LOOP_INTERVAL_IN_TICKS, GAME_LOOP_INTERVAL, ENEMIES_COUNT
 
 pygame.init()
 window = display.set_mode((MAP_WIDTH_IN_PX, MAP_HEIGHT_IN_PX))
@@ -30,7 +30,7 @@ draw_helper = DrawHelper(window, font)
 map_drawer = MapDrawer(draw_helper)
 # Game initialization
 game_loop = GameLoop(GAME_LOOP_INTERVAL)
-game = Game(game_map, game_loop)
+game = Game(game_map, game_loop, ENEMIES_COUNT)
 
 enemy_drawers = list(map(lambda e: EnemyDrawer(e, draw_helper), game.enemies))
 player_drawer = PlayerDrawer(game.player, draw_helper)

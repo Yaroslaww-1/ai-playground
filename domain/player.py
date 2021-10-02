@@ -43,3 +43,14 @@ class Player(Character):
         if search_algorithm == SearchAlgorithm.UCS:
             for enemy in enemies:
                 self.paths_to_enemies += self.search.ucs(Position(self.x, self.y), Position(enemy.x, enemy.y))
+
+    def get_next_position(self):
+        if self.is_moving and self.can_move_in_direction():
+            new_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
+            return new_position
+        else:
+            return Position(self.x, self.y)
+
+    def move_to_next_position(self):
+        next_position = self.get_next_position()
+        self.set_position(next_position)

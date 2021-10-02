@@ -54,6 +54,17 @@ class Map:
             return Position(x - 1, y)
         return None
 
+    def get_direction_from_to_positions(self, x1, y1, x2, y2):
+        if x2 > x1:
+            return Direction.RIGHT
+        if x2 < x1:
+            return Direction.LEFT
+        if y2 > y1:
+            return Direction.DOWN
+        if y2 < y1:
+            return Direction.UP
+        return None
+
     def get_random_adjacent_position(self, x, y):
         direction = self.get_random_opened_direction(x, y)
         return self.get_next_position_in_direction(x, y, direction)
