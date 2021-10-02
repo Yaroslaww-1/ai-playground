@@ -1,8 +1,10 @@
 import queue
 from timeit import default_timer as timer
+from typing import List
 
 from domain.map import MapTile
 from domain.position import Position
+from domain.search.a_star import AStar
 from domain.search.graph import Graph
 
 
@@ -92,6 +94,10 @@ class Search:
 
         self.end_timer()
         return path
+
+    def a_star(self, starting_position: Position, ending_position: Position) -> List[Position]:
+        a_star = AStar(self.map, self.graph)
+        return a_star.calculate_path(starting_position, ending_position)
 
     def get_path(self, parents, ending_vertex):
         path = []

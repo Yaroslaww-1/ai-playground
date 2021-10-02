@@ -55,19 +55,19 @@ def run_game():
             game.make_iteration()
 
             for keys in pressed_keys:
-                if keys[pygame.K_LEFT] and 'move' not in handled_pressed_keys:
-                    game.player.set_direction(Direction.LEFT)
-                    handled_pressed_keys.add('move')
-                elif keys[pygame.K_RIGHT] and 'move' not in handled_pressed_keys:
-                    game.player.set_direction(Direction.RIGHT)
-                    handled_pressed_keys.add('move')
-                elif keys[pygame.K_UP] and 'move' not in handled_pressed_keys:
-                    game.player.set_direction(Direction.UP)
-                    handled_pressed_keys.add('move')
-                elif keys[pygame.K_DOWN] and 'move' not in handled_pressed_keys:
-                    game.player.set_direction(Direction.DOWN)
-                    handled_pressed_keys.add('move')
-                elif keys[pygame.K_z] and 'algorithm_switch' not in handled_pressed_keys and \
+            #     if keys[pygame.K_LEFT] and 'move' not in handled_pressed_keys:
+            #         game.player.set_direction(Direction.LEFT)
+            #         handled_pressed_keys.add('move')
+            #     elif keys[pygame.K_RIGHT] and 'move' not in handled_pressed_keys:
+            #         game.player.set_direction(Direction.RIGHT)
+            #         handled_pressed_keys.add('move')
+            #     elif keys[pygame.K_UP] and 'move' not in handled_pressed_keys:
+            #         game.player.set_direction(Direction.UP)
+            #         handled_pressed_keys.add('move')
+            #     elif keys[pygame.K_DOWN] and 'move' not in handled_pressed_keys:
+            #         game.player.set_direction(Direction.DOWN)
+            #         handled_pressed_keys.add('move')
+                if keys[pygame.K_z] and 'algorithm_switch' not in handled_pressed_keys and \
                         ticks_from_previous_algorithm_switch > 100:
                     game.switch_search_algorithm()
                     ticks_from_previous_algorithm_switch = 0

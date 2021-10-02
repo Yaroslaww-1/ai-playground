@@ -17,8 +17,8 @@ class Enemy(Character):
         self.search = Search(map)
 
     def get_next_direction(self, player):
-        path_to_player = self.search.bfs(Position(self.x, self.y), Position(player.x, player.y))
-        for next_position in path_to_player:
+        optimal_path = self.search.bfs(Position(self.x, self.y), Position(player.x, player.y))
+        for next_position in optimal_path:
             if next_position.x != self.x or next_position.y != self.y:
                 return self.map.get_direction_from_to_positions(self.x, self.y, next_position.x, next_position.y)
         return None

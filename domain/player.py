@@ -1,4 +1,5 @@
 import random
+from typing import List, Optional
 
 from domain.character import Character
 from domain.direction_enum import Direction
@@ -44,6 +45,14 @@ class Player(Character):
             for enemy in enemies:
                 self.paths_to_enemies += self.search.ucs(Position(self.x, self.y), Position(enemy.x, enemy.y))
 
+    def get_next_direction(self, enemies, available_food: List[Position]) -> Optional[Direction]:
+        random_food_position = random.choice(available_food)
+        optimal_path = self.search.a_star(Position(self.x, self.y), Position(random_food_position.x, random_food_position.y))
+        for next_position in optimal_path:
+            if next_position.x != self.x or next_position.y != self.y:
+                return self.map.get_direction_from_to_positions(self.x, self.y, next_position.x, next_position.y)
+        return None
+
     def get_next_position(self):
         if self.is_moving and self.can_move_in_direction():
             new_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
@@ -51,6 +60,7 @@ class Player(Character):
         else:
             return Position(self.x, self.y)
 
-    def move_to_next_position(self):
+    def move_to_next_position(self, enemies, available_food: List[Position]) -> None:
         next_position = self.get_next_position()
         self.set_position(next_position)
+        self.direction = self.get_next_direction(enemies, available_food)
