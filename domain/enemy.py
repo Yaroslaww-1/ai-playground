@@ -3,6 +3,7 @@ import random
 from domain.character import Character
 from domain.direction_helper import DirectionHelper
 from domain.position import Position
+from domain.search.search import Search
 
 
 class Enemy(Character):
@@ -13,30 +14,23 @@ class Enemy(Character):
         self.steps_from_previous_turn = 0
         self.id = random.randint(0, 1000000)
         self.is_moving = True
+        self.search = Search(map)
+
+    def get_next_direction(self, player):
+        optimal_path = self.search.bfs(Position(self.x, self.y), Position(player.x, player.y))
+        for next_position in optimal_path:
+            if next_position.x != self.x or next_position.y != self.y:
+                return self.map.get_direction_from_to_positions(self.x, self.y, next_position.x, next_position.y)
+        return None
 
     def get_next_position(self):
-        next_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
+        if self.is_moving and self.can_move_in_direction():
+            new_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
+            return new_position
+        else:
+            return Position(self.x, self.y)
 
-        self.steps_from_previous_turn += 1
-
-        should_try_to_turn = self.steps_from_previous_turn > 10
-        if should_try_to_turn:
-            turn_direction = self.get_turn_direction()
-            if turn_direction is not None:
-                self.steps_from_previous_turn = 0
-                self.direction = turn_direction
-
-        opened_directions = self.map.get_all_opened_directions(next_position.x, next_position.y)
-        if self.direction not in opened_directions:
-            self.direction = opened_directions[0]
-
-        return next_position
-
-    def get_turn_direction(self):
-        opened_directions = self.map.get_all_opened_directions(self.x, self.y)
-        for opened_direction in opened_directions:
-            if opened_direction == self.direction:
-                continue
-            if DirectionHelper.is_directions_reverse(self.direction, opened_direction) is False:
-                return opened_direction
-        return None
+    def move_to_next_position(self, player):
+        next_position = self.get_next_position()
+        self.set_position(next_position)
+        self.direction = self.get_next_direction(player)
