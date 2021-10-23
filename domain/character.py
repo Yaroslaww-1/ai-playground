@@ -8,9 +8,11 @@ from domain.position import Position
 class Character:
     def __init__(self, map, initial_x, initial_y):
         self.map = map
+        self.initial_x = initial_x
         self.x = initial_x
+        self.initial_y = initial_y
         self.y = initial_y
-        self.is_moving = False
+        self.is_moving = True
         self.direction = DirectionHelper.get_random_directions()[0]
 
     def get_position(self):
@@ -19,6 +21,10 @@ class Character:
     def set_position(self, position):
         self.x = position.x
         self.y = position.y
+
+    def reset_position(self):
+        self.x = self.initial_x
+        self.y = self.initial_y
 
     def set_direction(self, direction):
         if self.is_moving:
@@ -58,3 +64,10 @@ class Character:
             self.set_position(Position(self.x, self.y + 1))
         else:
             self.is_moving = False
+
+    def get_next_position(self):
+        if self.is_moving and self.can_move_in_direction():
+            new_position = self.map.get_next_position_in_direction(self.x, self.y, self.direction)
+            return new_position
+        else:
+            return Position(self.x, self.y)

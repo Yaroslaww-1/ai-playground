@@ -1,8 +1,6 @@
-from pygame import display
-
 from domain.direction_enum import Direction
-from domain.player import Player
-from game.game_settings import UNIT_IN_PX, MOVE_PX_PER_TICK, GAME_LOOP_INTERVAL_IN_TICKS
+from domain.player.player import Player
+from game.game_settings import UNIT_IN_PX, MOVE_PX_PER_TICK
 
 
 class CharacterDrawer:
@@ -18,15 +16,15 @@ class CharacterDrawer:
         x = self.character.x * UNIT_IN_PX
         y = self.character.y * UNIT_IN_PX
 
-        if self.character.can_move_in_direction() and self.character.is_moving:
-            if self.character.direction == Direction.UP:
-                y -= movement_in_px
-            if self.character.direction == Direction.DOWN:
-                y += movement_in_px
-            if self.character.direction == Direction.LEFT:
-                x -= movement_in_px
-            if self.character.direction == Direction.RIGHT:
-                x += movement_in_px
+        # if self.character.can_move_in_direction() and self.character.is_moving:
+        #     if self.character.direction == Direction.UP:
+        #         y -= movement_in_px
+        #     if self.character.direction == Direction.DOWN:
+        #         y += movement_in_px
+        #     if self.character.direction == Direction.LEFT:
+        #         x -= movement_in_px
+        #     if self.character.direction == Direction.RIGHT:
+        #         x += movement_in_px
 
         if isinstance(self.character, Player):
             self.drawer_helper.draw_player(x, y)

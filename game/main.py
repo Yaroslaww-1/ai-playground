@@ -2,20 +2,23 @@ import pygame
 from pygame import display, key
 import pygame.event as events
 
+from domain.enemy.enemy import Enemy
+from domain.enemy.enemy_search_algorighm import EnemySearchAlgorithm
 from domain.game import Game
 from domain.map import Map
 from domain.map_filler import MapFiller
+from domain.player.player_search_algorithm import PlayerSearchAlgorithm
+from domain.search.search_algorithm_bfs import SearchAlgorithmBfs
 
 from game.drawers.draw_helper import DrawHelper
 from game.drawers.enemy_drawer import EnemyDrawer
-from game.drawers.algorithm_drawer import AlgorithmDrawer
 from game.drawers.player_drawer import PlayerDrawer
 from game.drawers.score_drawer import ScoreDrawer
 from game.drawers.game_drawer import GameDrawer
 from game_loop import GameLoop
 from game.drawers.map_drawer import MapDrawer
 from game_settings import MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES, MAP_WIDTH_IN_PX, MAP_HEIGHT_IN_PX, \
-    GAME_LOOP_INTERVAL_TICK, GAME_LOOP_INTERVAL_IN_TICKS, GAME_LOOP_INTERVAL, ENEMIES_COUNT
+    GAME_LOOP_INTERVAL_TICK, GAME_LOOP_INTERVAL_IN_TICKS, GAME_LOOP_INTERVAL
 
 pygame.init()
 window = display.set_mode((MAP_WIDTH_IN_PX, MAP_HEIGHT_IN_PX))
@@ -29,14 +32,19 @@ draw_helper = DrawHelper(window, font)
 map_drawer = MapDrawer(draw_helper)
 # Game initialization
 game_loop = GameLoop(GAME_LOOP_INTERVAL)
-game = Game(game_map, game_loop, ENEMIES_COUNT)
+search_algorithm_bfs = SearchAlgorithmBfs(game_map)
+player = PlayerSearchAlgorithm(game_map, 0, 0, search_algorithm_bfs)
+enemies = [
+    EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 1, search_algorithm_bfs),
+    EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 2, search_algorithm_bfs)
+]
+game = Game(game_map, game_loop, player, enemies)
 
 enemy_drawers = list(map(lambda e: EnemyDrawer(e, draw_helper), game.enemies))
 player_drawer = PlayerDrawer(game.player, draw_helper)
 score_drawer = ScoreDrawer(game.score, draw_helper)
-algorithm_drawer = AlgorithmDrawer(draw_helper)
 
-game_drawer = GameDrawer(map_drawer, enemy_drawers, player_drawer, score_drawer, algorithm_drawer)
+game_drawer = GameDrawer(map_drawer, enemy_drawers, player_drawer, score_drawer)
 
 
 def run_game():
@@ -45,9 +53,9 @@ def run_game():
     ticks = 0
     pressed_keys = []
     handled_pressed_keys = set()
-    ticks_from_previous_algorithm_switch = 0
     while is_game_running:
         pygame.time.delay(GAME_LOOP_INTERVAL_IN_TICKS * GAME_LOOP_INTERVAL_TICK)
+        game.make_iteration()
 
         # if ticks == GAME_LOOP_INTERVAL_IN_TICKS:
         #     ticks = 0
@@ -78,7 +86,6 @@ def run_game():
         game_drawer.draw_game(game, ticks)
 
         ticks += GAME_LOOP_INTERVAL_IN_TICKS
-        ticks_from_previous_algorithm_switch += 1
 
         # Handle user input
         keys = key.get_pressed()
@@ -88,7 +95,6 @@ def run_game():
         for event in events.get():
             if event.type == pygame.QUIT:
                 is_game_running = False
-
 
     game.stop()
 
