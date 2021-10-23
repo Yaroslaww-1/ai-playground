@@ -1,8 +1,4 @@
-from pygame import display
-
-from domain.direction_enum import Direction
-from game.character_drawer import CharacterDrawer
-from game.game_settings import UNIT_IN_PX
+from game.drawers.character_drawer import CharacterDrawer
 
 
 class PlayerDrawer(CharacterDrawer):

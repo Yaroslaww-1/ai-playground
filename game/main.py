@@ -2,19 +2,18 @@ import pygame
 from pygame import display, key
 import pygame.event as events
 
-from domain.direction_enum import Direction
 from domain.game import Game
 from domain.map import Map
 from domain.map_filler import MapFiller
 
-from draw_helper import DrawHelper
-from game.enemy_drawer import EnemyDrawer
-from game.algorithm_drawer import AlgorithmDrawer
-from game.player_drawer import PlayerDrawer
-from game.score_drawer import ScoreDrawer
-from game_drawer import GameDrawer
+from game.drawers.draw_helper import DrawHelper
+from game.drawers.enemy_drawer import EnemyDrawer
+from game.drawers.algorithm_drawer import AlgorithmDrawer
+from game.drawers.player_drawer import PlayerDrawer
+from game.drawers.score_drawer import ScoreDrawer
+from game.drawers.game_drawer import GameDrawer
 from game_loop import GameLoop
-from map_drawer import MapDrawer
+from game.drawers.map_drawer import MapDrawer
 from game_settings import MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES, MAP_WIDTH_IN_PX, MAP_HEIGHT_IN_PX, \
     GAME_LOOP_INTERVAL_TICK, GAME_LOOP_INTERVAL_IN_TICKS, GAME_LOOP_INTERVAL, ENEMIES_COUNT
 
@@ -48,37 +47,37 @@ def run_game():
     handled_pressed_keys = set()
     ticks_from_previous_algorithm_switch = 0
     while is_game_running:
-        pygame.time.delay(GAME_LOOP_INTERVAL_TICK)
+        pygame.time.delay(GAME_LOOP_INTERVAL_IN_TICKS * GAME_LOOP_INTERVAL_TICK)
 
-        if ticks == GAME_LOOP_INTERVAL_IN_TICKS:
-            ticks = 0
-            game.make_iteration()
-
-            for keys in pressed_keys:
-            #     if keys[pygame.K_LEFT] and 'move' not in handled_pressed_keys:
-            #         game.player.set_direction(Direction.LEFT)
-            #         handled_pressed_keys.add('move')
-            #     elif keys[pygame.K_RIGHT] and 'move' not in handled_pressed_keys:
-            #         game.player.set_direction(Direction.RIGHT)
-            #         handled_pressed_keys.add('move')
-            #     elif keys[pygame.K_UP] and 'move' not in handled_pressed_keys:
-            #         game.player.set_direction(Direction.UP)
-            #         handled_pressed_keys.add('move')
-            #     elif keys[pygame.K_DOWN] and 'move' not in handled_pressed_keys:
-            #         game.player.set_direction(Direction.DOWN)
-            #         handled_pressed_keys.add('move')
-                if keys[pygame.K_z] and 'algorithm_switch' not in handled_pressed_keys and \
-                        ticks_from_previous_algorithm_switch > 100:
-                    game.switch_search_algorithm()
-                    ticks_from_previous_algorithm_switch = 0
-                    handled_pressed_keys.add('algorithm_switch')
-
-            pressed_keys = []
-            handled_pressed_keys.clear()
+        # if ticks == GAME_LOOP_INTERVAL_IN_TICKS:
+        #     ticks = 0
+        #     game.make_iteration()
+        #
+        #     for keys in pressed_keys:
+        #         if keys[pygame.K_LEFT] and 'move' not in handled_pressed_keys:
+        #             game.player.set_direction(Direction.LEFT)
+        #             handled_pressed_keys.add('move')
+        #         elif keys[pygame.K_RIGHT] and 'move' not in handled_pressed_keys:
+        #             game.player.set_direction(Direction.RIGHT)
+        #             handled_pressed_keys.add('move')
+        #         elif keys[pygame.K_UP] and 'move' not in handled_pressed_keys:
+        #             game.player.set_direction(Direction.UP)
+        #             handled_pressed_keys.add('move')
+        #         elif keys[pygame.K_DOWN] and 'move' not in handled_pressed_keys:
+        #             game.player.set_direction(Direction.DOWN)
+        #             handled_pressed_keys.add('move')
+        #         if keys[pygame.K_z] and 'algorithm_switch' not in handled_pressed_keys and \
+        #                 ticks_from_previous_algorithm_switch > 100:
+        #             game.switch_search_algorithm()
+        #             ticks_from_previous_algorithm_switch = 0
+        #             handled_pressed_keys.add('algorithm_switch')
+        #
+        #     pressed_keys = []
+        #     handled_pressed_keys.clear()
 
         game_drawer.draw_game(game, ticks)
 
-        ticks += 1
+        ticks += GAME_LOOP_INTERVAL_IN_TICKS
         ticks_from_previous_algorithm_switch += 1
 
         # Handle user input

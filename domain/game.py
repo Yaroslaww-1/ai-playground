@@ -3,7 +3,6 @@ from typing import Callable
 from domain.enemy import Enemy
 from domain.player import Player
 from domain.position import Position
-from domain.lib.thread_job import ThreadJob
 from domain.score import Score
 from domain.search.search_algorithm_enum import SearchAlgorithm
 
