@@ -1,32 +1,29 @@
-import random
 from typing import List
 
 from domain.direction_enum import Direction
+from domain.minimax.minimax import Minimax
 from domain.player.player import Player
 from domain.position import Position
 from domain.score import Score
 from domain.search.search_algorithm import SearchAlgorithm
 
 
-class PlayerSearchAlgorithm(Player):
-    def __init__(self, map, initial_x, initial_y, search_algorithm: SearchAlgorithm):
+class PlayerMinimax(Player):
+    def __init__(self, map, initial_x, initial_y):
         super().__init__(map, initial_x, initial_y)
-        self.search_algorithm = search_algorithm
 
     def get_next_direction(
         self,
         enemy_positions: List[Position],
         score: Score
     ) -> Direction:
-        random_point_position = random.choice(score.available_points)
-        optimal_path = self.search_algorithm.find_path(
+        next_position = Minimax().find_optimal_next_position(
+            self.map,
             Position(self.x, self.y),
-            Position(random_point_position.x, random_point_position.y)
+            enemy_positions,
+            score
         )
-        for next_position in optimal_path:
-            if next_position.x != self.x or next_position.y != self.y:
-                return self.map.get_direction_from_to_positions(self.x, self.y, next_position.x, next_position.y)
-        return self.map.get_direction_from_to_positions(self.x, self.y, optimal_path[0].x, optimal_path[0].y)
+        return self.map.get_direction_from_to_positions(self.x, self.y, next_position.x, next_position.y)
 
     def move_to_next_position(
         self,

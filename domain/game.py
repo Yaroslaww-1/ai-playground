@@ -18,6 +18,7 @@ class Game:
         self.is_game_running = False
         self.is_game_over = False
         self.on_iteration = lambda: True
+        self.game_tick = 0
 
     def start(self):
         self.player.reset_position()
@@ -26,6 +27,7 @@ class Game:
         self.score.reset()
         self.is_game_running = True
         self.is_game_over = False
+        self.game_tick = 0
 
     def stop(self):
         self.game_loop.stop()
@@ -34,10 +36,12 @@ class Game:
     def make_iteration(self):
         if not self.is_game_running:
             return
-        for enemy in self.enemies:
-            enemy.move_to_next_position(self.player)
-        self.player.move_to_next_position(list(map(lambda enemy: Position(enemy.x, enemy.y), self.enemies)), self.score.available_points)
+        if self.game_tick % 2 == 0:
+            for enemy in self.enemies:
+                enemy.move_to_next_position(self.player)
+        self.player.move_to_next_position(list(map(lambda enemy: Position(enemy.x, enemy.y), self.enemies)), self.score)
         self.check_if_game_over()
+        self.game_tick += 1
 
     def handle_player_move(self):
         if not self.is_game_running:

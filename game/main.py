@@ -3,10 +3,12 @@ from pygame import display, key
 import pygame.event as events
 
 from domain.enemy.enemy import Enemy
+from domain.enemy.enemy_random import EnemyRandom
 from domain.enemy.enemy_search_algorighm import EnemySearchAlgorithm
 from domain.game import Game
 from domain.map import Map
 from domain.map_filler import MapFiller
+from domain.player.player_minimax import PlayerMinimax
 from domain.player.player_search_algorithm import PlayerSearchAlgorithm
 from domain.search.search_algorithm_bfs import SearchAlgorithmBfs
 
@@ -33,10 +35,10 @@ map_drawer = MapDrawer(draw_helper)
 # Game initialization
 game_loop = GameLoop(GAME_LOOP_INTERVAL)
 search_algorithm_bfs = SearchAlgorithmBfs(game_map)
-player = PlayerSearchAlgorithm(game_map, 0, 0, search_algorithm_bfs)
+player = PlayerMinimax(game_map, 0, 0)
 enemies = [
     EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 1, search_algorithm_bfs),
-    EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 2, search_algorithm_bfs)
+    EnemyRandom(game_map, game_map.width - 1, game_map.height - 2)
 ]
 game = Game(game_map, game_loop, player, enemies)
 
