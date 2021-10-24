@@ -10,14 +10,14 @@ class SearchAlgorithm:
     def __init__(self, map):
         self.map = map
         self.vertices_count = self.get_vertices_count()
-        self.graph = self.get_graph()
+        self.initialize_graph()
 
     def get_vertices_count(self):
-        empty_tiles = list(filter(lambda t: t == MapTile.EMPTY, self.map.tiles))
+        empty_tiles = list(filter(lambda t: t == MapTile.EMPTY, self.map.get_tiles()))
         vertices_count = len(empty_tiles)
         return vertices_count
 
-    def get_graph(self):
+    def initialize_graph(self):
         graph = Graph(self.vertices_count)
         for x_from in range(0, self.map.width):
             for y_from in range(0, self.map.height):
@@ -27,7 +27,7 @@ class SearchAlgorithm:
                                 self.map.is_tile_empty(x_from, y_from) and \
                                 self.map.is_tile_empty(x_to, y_to):
                             graph.add_undirected_edge(Position(x_from, y_from), Position(x_to, y_to))
-        return graph
+        self.graph = graph
 
     def find_path(
         self,

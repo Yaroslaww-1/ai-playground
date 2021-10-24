@@ -17,6 +17,12 @@ class Map:
         self.height = height
         self.tiles = [[MapTile.EMPTY for x in range(self.width)] for y in range(self.height)]
 
+    def reset(self):
+        self.tiles = [[MapTile.EMPTY for x in range(self.width)] for y in range(self.height)]
+
+    def get_tiles(self):
+        return self.tiles
+
     def set_tiles(self, tiles):
         self.tiles = tiles
 
