@@ -1,6 +1,4 @@
-from pygame import display
-
-from game.character_drawer import CharacterDrawer
+from game.drawers.character_drawer import CharacterDrawer
 
 
 class EnemyDrawer(CharacterDrawer):

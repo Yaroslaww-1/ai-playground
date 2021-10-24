@@ -1,8 +1,4 @@
-from pygame import display
-
-from domain.direction_enum import Direction
-from domain.player import Player
-from game.game_settings import UNIT_IN_PX, MOVE_PX_PER_TICK, GAME_LOOP_INTERVAL_IN_TICKS
+from game.game_settings import UNIT_IN_PX
 
 
 class ScoreDrawer:

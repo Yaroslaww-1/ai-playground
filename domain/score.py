@@ -34,3 +34,9 @@ class Score:
     def reset(self):
         self.available_points = self.get_initial_available_points()
         self.score = 0
+
+    def has_point(self, position: Position):
+        for available_point in self.available_points:
+            if available_point.x == position.x and available_point.y == position.y:
+                return True
+        return False

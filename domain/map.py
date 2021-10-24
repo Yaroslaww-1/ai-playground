@@ -1,4 +1,5 @@
 from enum import IntEnum
+from typing import List
 
 from domain.direction_enum import Direction
 from domain.direction_helper import DirectionHelper
@@ -15,6 +16,12 @@ class Map:
         self.width = width
         self.height = height
         self.tiles = [[MapTile.EMPTY for x in range(self.width)] for y in range(self.height)]
+
+    def reset(self):
+        self.tiles = [[MapTile.EMPTY for x in range(self.width)] for y in range(self.height)]
+
+    def get_tiles(self):
+        return self.tiles
 
     def set_tiles(self, tiles):
         self.tiles = tiles
@@ -77,3 +84,17 @@ class Map:
 
     def is_tile_empty(self, x, y):
         return self.get_tile(x, y) == MapTile.EMPTY
+
+    def get_all_adjacent_positions(self, position: Position) -> List[Position]:
+        adjacent_positions = []
+
+        if position.x > 0 and self.is_tile_empty(position.x - 1, position.y):
+            adjacent_positions.append(Position(position.x - 1, position.y))
+        if position.y > 0 and self.is_tile_empty(position.x, position.y - 1):
+            adjacent_positions.append(Position(position.x, position.y - 1))
+        if position.x < self.width - 1 and self.is_tile_empty(position.x + 1, position.y):
+            adjacent_positions.append(Position(position.x + 1, position.y))
+        if position.y < self.height - 1 and self.is_tile_empty(position.x, position.y + 1):
+            adjacent_positions.append(Position(position.x, position.y + 1))
+
+        return adjacent_positions
