@@ -15,3 +15,6 @@ class Position:
 
     def __hash__(self):
         return self.y * 10000 + self.x
+
+    def __str__(self):
+        return f'{self.x}-{self.y}'

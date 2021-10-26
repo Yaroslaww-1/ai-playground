@@ -16,7 +16,7 @@ class Minimax:
     def reset_parameters(self):
         self.MIN = MIN
         self.MAX = MAX
-        self.MAX_DEPTH = 5
+        self.MAX_DEPTH = 4
         self.ALPHA = MIN
         self.BETA = MAX
 
@@ -28,8 +28,14 @@ class Minimax:
         score: Score
     ) -> Position:
         self.reset_parameters()
-        starting_node = MinimaxTreeBuilder(map).build(position, enemy_positions, score, 0)
+        starting_node = MinimaxTreeBuilder(map).build(None, position, enemy_positions, score.available_points.copy(), 0)
+        starting_node.parent = None
         next = self._minimax(0, starting_node, True)
+        while True: #TODO: simplify
+            if next.parent is None or next.parent.parent is None or next.parent.parent.parent is None:
+                break
+            next = next.parent
+        print("end minimax", next.value, position, ' -> ', next.position)
         return next.position
 
     def _minimax(
@@ -45,7 +51,7 @@ class Minimax:
         beta = self.BETA
 
         if maximizing_player:
-            best_node = MinimaxNode(self.MIN, current_node.children, current_node.position)
+            best_node = MinimaxNode(self.MIN, current_node.children, current_node.position, current_node)
 
             for child in current_node.children:
                 if child is None:
@@ -63,7 +69,7 @@ class Minimax:
 
             return best_node
         else:
-            best_node = MinimaxNode(self.MAX, current_node.children, current_node.position)
+            best_node = MinimaxNode(self.MAX, current_node.children, current_node.position, current_node)
 
             for child in current_node.children:
                 if child is None:

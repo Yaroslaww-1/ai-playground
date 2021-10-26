@@ -17,8 +17,8 @@ class Evaluator:
             min_distance_to_enemy = min(min_distance_to_enemy, distance_to_enemy)
 
         # for minimax TODO: move to separate evaluator
-        # return math.log(min_distance_to_enemy + 1, 2) + has_point * 0.95
+        # print(has_point,  math.log(min_distance_to_enemy + 1, 1.25) + has_point * 10000)
+        # return math.log(min_distance_to_enemy + 1, 1.25) + has_point * 5
 
         # for expectimax
-        return math.log(min_distance_to_enemy + 1, 1.25) + has_point * 0.95
-        # return min_distance_to_enemy * 0.35 + has_point
+        return math.log(min_distance_to_enemy + 1, 1.25) + has_point
