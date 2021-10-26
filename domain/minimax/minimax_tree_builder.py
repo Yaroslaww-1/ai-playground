@@ -1,9 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 from domain.map import Map
 from domain.minimax.evaluator import Evaluator
 from domain.position import Position
-from domain.score import Score
 
 
 class MinimaxNode:
@@ -11,41 +10,77 @@ class MinimaxNode:
         self,
         value: int,
         children: List["MinimaxNode"],
-        position: Position
+        position: Position,
+        parent: Optional["MinimaxNode"]
     ):
         self.value = value
         self.children = children
         self.position = position
+        self.parent = parent
 
 
 class MinimaxTreeBuilder:
     def __init__(self, map: Map):
         self.map = map
         self.evaluator = Evaluator(map)
-        self.MAX_DEPTH = 6
+        self.MAX_DEPTH = 5  # 5 for minimax
 
     def build(
         self,
-        current_position: Position,
+        parent_node: Optional[MinimaxNode],
+        player_position: Position,
         enemy_positions: List[Position],
-        score: Score,
+        available_points: List[Position],
         depth
     ) -> MinimaxNode:
         if depth >= self.MAX_DEPTH:
             return None
 
-        node = MinimaxNode(
-            self.evaluator.evaluate(current_position, enemy_positions, score.has_point(current_position)),
-            [],
-            current_position
-        )
+        if depth % 2 == 0:
+            # pacman turn
+            node = MinimaxNode(
+                self.evaluator.evaluate(player_position, enemy_positions, available_points.count(player_position) > 0),
+                [],
+                player_position,
+                parent_node
+            )
 
-        for neighbour_position in self.map.get_all_adjacent_positions(current_position):
-            node.children.append(self.build(
-                neighbour_position,
-                enemy_positions,
-                score,
-                depth + 1
-            ))
+            # print("e for player", node.value)
+
+            for neighbour_position in self.map.get_all_adjacent_positions(player_position):
+                cp = available_points.copy()
+                if available_points.count(player_position) > 0:
+                    cp.remove(player_position)
+                node.children.append(self.build(
+                    node,
+                    neighbour_position,
+                    enemy_positions,
+                    cp,
+                    depth + 1,
+                ))
+        else:
+            # enemy turn
+            node = MinimaxNode(
+                self.evaluator.evaluate(player_position, enemy_positions, available_points.count(player_position) > 0),
+                [],
+                enemy_positions[0],
+                parent_node
+            )
+
+            #enemy_positions[0].x, enemy_positions[0].y, player_position.x, player_position.y,
+            # print("e for enemy", node.value)
+
+            for enemy_position in enemy_positions:
+                for neighbour_position in self.map.get_all_adjacent_positions(enemy_position):
+                    cp = enemy_positions.copy()
+                    cp.remove(enemy_position)
+                    cp.append(neighbour_position)
+                    node.children.append(self.build(
+                        node,
+                        player_position,
+                        cp,
+                        available_points,
+                        depth + 1
+                    ))
 
         return node

@@ -37,9 +37,9 @@ class Game:
     def make_iteration(self):
         if not self.is_game_running:
             return
-        if self.game_tick % 2 == 0:
-            for enemy in self.enemies:
-                enemy.move_to_next_position(self.player)
+        # if self.game_tick % 2 == 0:
+        for enemy in self.enemies:
+            enemy.move_to_next_position(self.player)
         self.player.move_to_next_position(list(map(lambda enemy: Position(enemy.x, enemy.y), self.enemies)), self.score)
         self.check_if_game_over()
         self.check_if_game_win()

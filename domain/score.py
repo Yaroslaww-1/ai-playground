@@ -24,12 +24,12 @@ class Score:
                 self.remove_available_point(available_point)
                 self.score += 1
 
-    def set_available_points(self, available_points=[]):
-        should_notify = True if numpy.array_equal(self.available_points, available_points) else False
-        self.available_points = available_points
-
     def remove_available_point(self, point_position):
-        self.available_points.remove(point_position)
+        if self.available_points.count(point_position) > 0:
+            self.available_points.remove(point_position)
+
+    def add_available_point(self, point_position):
+        self.available_points.append(point_position)
 
     def reset(self):
         self.available_points = self.get_initial_available_points()
