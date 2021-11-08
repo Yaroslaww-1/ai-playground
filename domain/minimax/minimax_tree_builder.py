@@ -39,13 +39,18 @@ class MinimaxTreeBuilder:
         if depth % 2 == 0:
             # pacman turn
             node = MinimaxNode(
-                self.evaluator.evaluate(player_position, enemy_positions, available_points.count(player_position) > 0),
+                self.evaluator.evaluate(
+                    player_position,
+                    enemy_positions,
+                    available_points.count(player_position) > 0,
+                    available_points
+                ),
                 [],
                 player_position,
                 parent_node
             )
 
-            # print("e for player", node.value)
+            # print("e for player", node.value, depth)
 
             for neighbour_position in self.map.get_all_adjacent_positions(player_position):
                 cp = available_points.copy()
@@ -61,14 +66,19 @@ class MinimaxTreeBuilder:
         else:
             # enemy turn
             node = MinimaxNode(
-                self.evaluator.evaluate(player_position, enemy_positions, available_points.count(player_position) > 0),
+                self.evaluator.evaluate(
+                    player_position,
+                    enemy_positions,
+                    available_points.count(player_position) > 0,
+                    available_points
+                ),
                 [],
                 enemy_positions[0],
                 parent_node
             )
 
             #enemy_positions[0].x, enemy_positions[0].y, player_position.x, player_position.y,
-            # print("e for enemy", node.value)
+            # print("e for enemy", node.value, depth)
 
             for enemy_position in enemy_positions:
                 for neighbour_position in self.map.get_all_adjacent_positions(enemy_position):

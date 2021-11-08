@@ -12,11 +12,12 @@ class SearchAlgorithmBfs(SearchAlgorithm):
         self,
         starting_position: Position,
         ending_position: Position,
-        enemy_positions: Optional[List[Position]] = []
+        enemy_positions: Optional[List[Position]] = [],
+        avoid_position: Optional[Position] = None
     ) -> List[Position]:
         # BFS
         queue = [starting_position]
-        visited = {starting_position: True}
+        visited = {starting_position: True, avoid_position: True}
         parents = {starting_position: None}
         while len(queue) > 0:
             current = queue.pop(0)

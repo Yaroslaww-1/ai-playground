@@ -98,3 +98,13 @@ class Map:
             adjacent_positions.append(Position(position.x, position.y + 1))
 
         return adjacent_positions
+
+    def get_reverse_direction(self, direction: Direction) -> Direction:
+        if direction == Direction.DOWN:
+            return Direction.UP
+        if direction == Direction.UP:
+            return Direction.DOWN
+        if direction == Direction.LEFT:
+            return Direction.RIGHT
+        if direction == Direction.RIGHT:
+            return Direction.LEFT
