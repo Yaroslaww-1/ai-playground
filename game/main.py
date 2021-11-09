@@ -15,6 +15,7 @@ from domain.player.player_expectimax import PlayerExpectimax
 from domain.player.player_minimax import PlayerMinimax
 from domain.player.player_search_algorithm import PlayerSearchAlgorithm
 from domain.search.search_algorithm_bfs import SearchAlgorithmBfs
+from domain.search.search_algorithm_dfs import SearchAlgorithmDfs
 
 from game.drawers.draw_helper import DrawHelper
 from game.drawers.enemy_drawer import EnemyDrawer
@@ -33,21 +34,26 @@ font = pygame.font.SysFont('Comic Sans MS', 30)
 csv_writer = GameResultCsvWriter('./output.csv')
 
 
+game_map = Map(MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES)
+map_filler = MapFiller(game_map)
+map_filler.fill()
+
+
 def run_game():
     start_time = time.time()
 
     # Map initialization
-    game_map = Map(MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES)
-    map_filler = MapFiller(game_map)
-    map_filler.fill()
+    # game_map = Map(MAP_WIDTH_IN_TILES, MAP_HEIGHT_IN_TILES)
+    # map_filler = MapFiller(game_map)
+    # map_filler.fill()
 
     # Game initialization
     game_loop = GameLoop(GAME_LOOP_INTERVAL)
-    search_algorithm_bfs = SearchAlgorithmBfs(game_map)
-    player = PlayerExpectimax(game_map, 0, 0)
+    enemy_search_algorithm = SearchAlgorithmBfs(game_map)
+    player = PlayerMinimax(game_map, 0, 0)
     enemies = [
-        EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 1, search_algorithm_bfs),
-        EnemyRandom(game_map, game_map.width - 1, game_map.height - 2)
+        EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 1, enemy_search_algorithm),
+        # EnemySearchAlgorithm(game_map, game_map.width - 1, game_map.height - 2, enemy_search_algorithm),
     ]
     game = Game(game_map, game_loop, player, enemies)
 
@@ -67,7 +73,7 @@ def run_game():
         game.make_iteration()
         print(time.time() - start_time)
         if not game.is_game_running:
-            csv_writer.write(not game.is_game_over, time.time() - start_time, game.score.score, 'bfs')
+            csv_writer.write(not game.is_game_over, (time.time() - start_time) * 10, game.score.score, 'bfs')
             break
 
         game_drawer.draw_game(game, ticks)

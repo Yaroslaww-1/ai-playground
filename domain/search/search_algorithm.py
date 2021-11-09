@@ -33,6 +33,7 @@ class SearchAlgorithm:
         self,
         starting_position: Position,
         ending_position: Position,
-        enemy_positions: Optional[List[Position]] = []
+        enemy_positions: Optional[List[Position]] = [],
+        avoid_positions: Optional[Position] = None,
     ) -> List[Position]:
         raise NotImplementedError()

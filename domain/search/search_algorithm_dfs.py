@@ -4,7 +4,7 @@ from domain.position import Position
 from domain.search.search_algorithm import SearchAlgorithm
 
 
-class SearchAlgorithmBfs(SearchAlgorithm):
+class SearchAlgorithmDfs(SearchAlgorithm):
     def __init__(self, map):
         super().__init__(map)
 
@@ -12,7 +12,8 @@ class SearchAlgorithmBfs(SearchAlgorithm):
         self,
         starting_position: Position,
         ending_position: Position,
-        enemy_positions: Optional[List[Position]] = []
+        enemy_positions: Optional[List[Position]] = [],
+        avoid_position: Optional[Position] = None
     ) -> List[Position]:
         # DFS
         stack = [starting_position]

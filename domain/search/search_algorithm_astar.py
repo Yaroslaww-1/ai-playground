@@ -30,7 +30,8 @@ class SearchAlgorithmAstar(SearchAlgorithm):
         self,
         starting_position: Position,
         ending_position: Position,
-        enemy_positions: Optional[List[Position]] = []
+        enemy_positions: Optional[List[Position]] = [],
+        avoid_position: Optional[Position] = None
     ):
         start_vertex = VertexWithAStarInfo(None, starting_position)
         end_vertex = VertexWithAStarInfo(None, ending_position)

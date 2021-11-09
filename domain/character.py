@@ -13,7 +13,7 @@ class Character:
         self.initial_y = initial_y
         self.y = initial_y
         self.is_moving = True
-        self.direction = DirectionHelper.get_random_directions()[0]
+        self.direction = self.map.get_random_opened_direction(self.x, self.y)
 
     def get_position(self):
         return Position(self.x, self.y)
