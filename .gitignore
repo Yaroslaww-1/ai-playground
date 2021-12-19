@@ -150,3 +150,8 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
+
+game/saves/model*
+saves/model*
+saves/checkpoint*
+logs/*.log 

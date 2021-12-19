@@ -42,6 +42,10 @@ class Map:
                 return direction
         return None
 
+    def get_random_direction(self) -> Direction:
+        directions = DirectionHelper.get_random_directions()
+        return directions[0]
+
     def get_all_opened_directions(self, x, y):
         opened_directions = []
         directions = DirectionHelper.get_random_directions()

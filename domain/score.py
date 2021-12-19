@@ -1,28 +1,20 @@
-import numpy
+from copy import deepcopy
+from typing import List
 
-from domain.map import MapTile
 from domain.position import Position
 
 
 class Score:
-    def __init__(self, map):
+    def __init__(self, available_points: List[Position], initial_score=0):
         self.map = map
-        self.available_points = self.get_initial_available_points()
-        self.score = 0
-
-    def get_initial_available_points(self):
-        available_point_coordinates = []
-        for x in range(self.map.width):
-            for y in range(self.map.height):
-                if self.map.is_tile_equals(x, y, MapTile.EMPTY):
-                    available_point_coordinates.append(Position(x, y))
-        return available_point_coordinates
+        self.available_points = deepcopy(available_points)
+        self.score = initial_score
 
     def handle_player_move(self, player_x, player_y):
         for available_point in self.available_points:
             if available_point.x == player_x and available_point.y == player_y:
                 self.remove_available_point(available_point)
-                self.score += 1
+                self.score += 50
 
     def remove_available_point(self, point_position):
         if self.available_points.count(point_position) > 0:
@@ -30,10 +22,6 @@ class Score:
 
     def add_available_point(self, point_position):
         self.available_points.append(point_position)
-
-    def reset(self):
-        self.available_points = self.get_initial_available_points()
-        self.score = 0
 
     def has_point(self, position: Position):
         for available_point in self.available_points:

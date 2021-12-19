@@ -2,11 +2,12 @@ import random
 
 from domain.direction_enum import Direction
 from domain.direction_helper import DirectionHelper
+from domain.map import Map
 from domain.position import Position
 
 
 class Character:
-    def __init__(self, map, initial_x, initial_y):
+    def __init__(self, map: Map, initial_x, initial_y):
         self.map = map
         self.initial_x = initial_x
         self.x = initial_x

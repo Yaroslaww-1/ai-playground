@@ -26,7 +26,6 @@ class EnemySearchAlgorithm(Enemy):
         # should_decide_direction = self.map.get_next_position_in_direction(self.x, self.y, self.direction) is None
         # if should_decide_direction:
         next_position = self.get_next_position()
-        print(f"pos {self.previous_position} -> {self.x}-{self.y} -> {next_position} {self.direction}")
         self.previous_position = Position(self.x, self.y)
         self.set_position(next_position)
         self.direction = self.get_next_direction(player)
