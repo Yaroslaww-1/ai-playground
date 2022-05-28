@@ -1,5 +1,5 @@
 # AI-playground
-AI algorithms implementation in Pac-Man game
+Pac-Man game implementation using some foundational AI concepts, such as informed state-space search, probabilistic inference, and reinforcement learning. Based on [UC Berkeley CS188 Intro to AI course](http://ai.berkeley.edu/project_overview.html).
 
 # Status
 - Lab 1 - [basic-game](https://github.com/Yaroslaww-1/ai-playground/tree/lab1-basic-game)
